@@ -1,0 +1,512 @@
+
+
+================================================================
+== Vitis HLS Report for 'mmult_accel_Pipeline_writeC_VITIS_LOOP_261_17'
+================================================================
+* Date:           Mon Feb 17 22:50:21 2025
+
+* Version:        2024.2 (Build 5238294 on Nov  8 2024)
+* Project:        MatMul_SA
+* Solution:       hls (Vivado IP Flow Target)
+* Product family: zynquplus
+* Target device:  xck26-sfvc784-2LV-c
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+---------+----------+------------+
+    |  Clock |  Target | Estimated| Uncertainty|
+    +--------+---------+----------+------------+
+    |ap_clk  |  0.20 us|  0.198 us|     2.00 ns|
+    +--------+---------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+-----------+-----+-----+------------------------------------------------+
+    |  Latency (cycles) |   Latency (absolute)  |  Interval |                    Pipeline                    |
+    |   min   |   max   |    min    |    max    | min | max |                      Type                      |
+    +---------+---------+-----------+-----------+-----+-----+------------------------------------------------+
+    |      264|      264|  52.800 us|  52.800 us|  257|  257|  loop auto-rewind stp (delay=0 clock cycles(s))|
+    +---------+---------+-----------+-----------+-----+-----+------------------------------------------------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +----------------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |                            |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |          Loop Name         |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +----------------------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- writeC_VITIS_LOOP_261_17  |      262|      262|         8|          1|          1|   256|       yes|
+        +----------------------------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+------+--------+--------+-----+
+|       Name      | BRAM_18K|  DSP |   FF   |   LUT  | URAM|
++-----------------+---------+------+--------+--------+-----+
+|DSP              |        -|     -|       -|       -|    -|
+|Expression       |        -|     -|       0|     392|    -|
+|FIFO             |        -|     -|       -|       -|    -|
+|Instance         |        -|     4|       0|    1125|    -|
+|Memory           |        -|     -|       -|       -|    -|
+|Multiplexer      |        -|     -|       0|      99|    -|
+|Register         |        -|     -|     229|      32|    -|
++-----------------+---------+------+--------+--------+-----+
+|Total            |        0|     4|     229|    1648|    0|
++-----------------+---------+------+--------+--------+-----+
+|Available        |      288|  1248|  234240|  117120|   64|
++-----------------+---------+------+--------+--------+-----+
+|Utilization (%)  |        0|    ~0|      ~0|       1|    0|
++-----------------+---------+------+--------+--------+-----+
+
++ Detail: 
+    * Instance: 
+    +-----------------------------+-----------------------+---------+----+---+----+-----+
+    |           Instance          |         Module        | BRAM_18K| DSP| FF| LUT| URAM|
+    +-----------------------------+-----------------------+---------+----+---+----+-----+
+    |mul_32ns_32s_62_1_1_U3349    |mul_32ns_32s_62_1_1    |        0|   4|  0|  20|    0|
+    |sparsemux_33_4_32_1_1_U3350  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3351  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3352  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3353  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3354  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3355  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3356  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3357  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3358  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3359  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3360  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3361  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3362  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3363  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3364  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3365  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    |sparsemux_33_4_32_1_1_U3366  |sparsemux_33_4_32_1_1  |        0|   0|  0|  65|    0|
+    +-----------------------------+-----------------------+---------+----+---+----+-----+
+    |Total                        |                       |        0|   4|  0|1125|    0|
+    +-----------------------------+-----------------------+---------+----+---+----+-----+
+
+    * DSP: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +---------------------------------------+----------+----+---+----+------------+------------+
+    |             Variable Name             | Operation| DSP| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +---------------------------------------+----------+----+---+----+------------+------------+
+    |add_ln259_1_fu_2301_p2                 |         +|   0|  0|  12|           5|           1|
+    |add_ln259_fu_2275_p2                   |         +|   0|  0|  16|           9|           1|
+    |add_ln261_fu_3634_p2                   |         +|   0|  0|  12|           5|           1|
+    |add_ln264_fu_2348_p2                   |         +|   0|  0|  39|          32|          32|
+    |add_ln266_1_fu_3608_p2                 |         +|   0|  0|  71|          64|          64|
+    |add_ln266_fu_3594_p2                   |         +|   0|  0|  69|          62|          62|
+    |empty_fu_2323_p2                       |         +|   0|  0|  39|          32|          32|
+    |and_ln264_fu_2364_p2                   |       and|   0|  0|   2|           1|           1|
+    |ap_block_pp0_stage0_11001_grp2         |       and|   0|  0|   2|           1|           1|
+    |ap_block_state2_io_grp1                |       and|   0|  0|   2|           1|           1|
+    |ap_block_state3_io_grp2                |       and|   0|  0|   2|           1|           1|
+    |ap_block_state8_pp0_stage0_iter7_grp1  |       and|   0|  0|   2|           1|           1|
+    |cmp424_fu_2334_p2                      |      icmp|   0|  0|  39|          32|          32|
+    |icmp_ln259_fu_2269_p2                  |      icmp|   0|  0|  17|           9|          10|
+    |icmp_ln261_fu_2287_p2                  |      icmp|   0|  0|  13|           5|           6|
+    |icmp_ln264_fu_2358_p2                  |      icmp|   0|  0|  39|          32|          32|
+    |ap_block_pp0_stage0_11001              |        or|   0|  0|   2|           1|           1|
+    |ap_block_pp0_stage0_11001_grp1         |        or|   0|  0|   2|           1|           1|
+    |select_ln259_1_fu_2307_p3              |    select|   0|  0|   5|           1|           5|
+    |select_ln259_fu_2293_p3                |    select|   0|  0|   5|           1|           1|
+    |ap_enable_pp0                          |       xor|   0|  0|   2|           1|           2|
+    +---------------------------------------+----------+----+---+----+------------+------------+
+    |Total                                  |          |   0|  0| 392|         297|         288|
+    +---------------------------------------+----------+----+---+----+------------+------------+
+
+    * Multiplexer: 
+    +------------------------------------------+----+-----------+-----+-----------+
+    |                   Name                   | LUT| Input Size| Bits| Total Bits|
+    +------------------------------------------+----+-----------+-----+-----------+
+    |ap_done_int                               |   9|          2|    1|          2|
+    |ap_enable_reg_pp0_iter1                   |   9|          2|    1|          2|
+    |ap_sig_allocacmp_ii_load                  |   9|          2|    5|         10|
+    |ap_sig_allocacmp_indvar_flatten1066_load  |   9|          2|    9|         18|
+    |ap_sig_allocacmp_jj_load                  |   9|          2|    5|         10|
+    |gmem0_blk_n_AW                            |   9|          2|    1|          2|
+    |gmem0_blk_n_B                             |   9|          2|    1|          2|
+    |gmem0_blk_n_W                             |   9|          2|    1|          2|
+    |ii_fu_634                                 |   9|          2|    5|         10|
+    |indvar_flatten1066_fu_638                 |   9|          2|    9|         18|
+    |jj_fu_630                                 |   9|          2|    5|         10|
+    +------------------------------------------+----+-----------+-----+-----------+
+    |Total                                     |  99|         22|   43|         86|
+    +------------------------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-------------------------------------------+----+----+-----+-----------+
+    |                    Name                   | FF | LUT| Bits| Const Bits|
+    +-------------------------------------------+----+----+-----+-----------+
+    |and_ln264_reg_3680                         |   1|   0|    1|          0|
+    |ap_CS_fsm                                  |   1|   0|    1|          0|
+    |ap_block_pp0_stage0_subdone_grp1_done_reg  |   1|   0|    1|          0|
+    |ap_block_pp0_stage0_subdone_grp2_done_reg  |   1|   0|    1|          0|
+    |ap_done_reg                                |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter1                    |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter2                    |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter3                    |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter4                    |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter5                    |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter6                    |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter7                    |   1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter1_reg           |   1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter2_reg           |   1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter3_reg           |   1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter4_reg           |   1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter5_reg           |   1|   0|    1|          0|
+    |ap_loop_exit_ready_pp0_iter6_reg           |   1|   0|    1|          0|
+    |gmem0_addr_reg_3689                        |  64|   0|   64|          0|
+    |ii_fu_634                                  |   5|   0|    5|          0|
+    |indvar_flatten1066_fu_638                  |   9|   0|    9|          0|
+    |jj_fu_630                                  |   5|   0|    5|          0|
+    |tmp_16_reg_3684                            |  32|   0|   32|          0|
+    |tmp_16_reg_3684_pp0_iter1_reg              |  32|   0|   32|          0|
+    |and_ln264_reg_3680                         |  64|  32|    1|          0|
+    +-------------------------------------------+----+----+-----+-----------+
+    |Total                                      | 229|  32|  166|          0|
+    +-------------------------------------------+----+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++------------------------+-----+-----+------------+-----------------------------------------------+--------------+
+|        RTL Ports       | Dir | Bits|  Protocol  |                 Source Object                 |    C Type    |
++------------------------+-----+-----+------------+-----------------------------------------------+--------------+
+|ap_clk                  |   in|    1|  ap_ctrl_hs|  mmult_accel_Pipeline_writeC_VITIS_LOOP_261_17|  return value|
+|ap_rst                  |   in|    1|  ap_ctrl_hs|  mmult_accel_Pipeline_writeC_VITIS_LOOP_261_17|  return value|
+|ap_start                |   in|    1|  ap_ctrl_hs|  mmult_accel_Pipeline_writeC_VITIS_LOOP_261_17|  return value|
+|ap_done                 |  out|    1|  ap_ctrl_hs|  mmult_accel_Pipeline_writeC_VITIS_LOOP_261_17|  return value|
+|ap_idle                 |  out|    1|  ap_ctrl_hs|  mmult_accel_Pipeline_writeC_VITIS_LOOP_261_17|  return value|
+|ap_ready                |  out|    1|  ap_ctrl_hs|  mmult_accel_Pipeline_writeC_VITIS_LOOP_261_17|  return value|
+|m_axi_gmem0_0_AWVALID   |  out|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_AWREADY   |   in|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_AWADDR    |  out|   64|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_AWID      |  out|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_AWLEN     |  out|   32|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_AWSIZE    |  out|    3|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_AWBURST   |  out|    2|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_AWLOCK    |  out|    2|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_AWCACHE   |  out|    4|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_AWPROT    |  out|    3|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_AWQOS     |  out|    4|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_AWREGION  |  out|    4|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_AWUSER    |  out|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_WVALID    |  out|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_WREADY    |   in|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_WDATA     |  out|   32|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_WSTRB     |  out|    4|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_WLAST     |  out|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_WID       |  out|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_WUSER     |  out|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_ARVALID   |  out|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_ARREADY   |   in|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_ARADDR    |  out|   64|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_ARID      |  out|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_ARLEN     |  out|   32|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_ARSIZE    |  out|    3|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_ARBURST   |  out|    2|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_ARLOCK    |  out|    2|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_ARCACHE   |  out|    4|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_ARPROT    |  out|    3|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_ARQOS     |  out|    4|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_ARREGION  |  out|    4|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_ARUSER    |  out|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_RVALID    |   in|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_RREADY    |  out|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_RDATA     |   in|   32|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_RLAST     |   in|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_RID       |   in|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_RFIFONUM  |   in|    9|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_RUSER     |   in|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_RRESP     |   in|    2|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_BVALID    |   in|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_BREADY    |  out|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_BRESP     |   in|    2|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_BID       |   in|    1|       m_axi|                                          gmem0|       pointer|
+|m_axi_gmem0_0_BUSER     |   in|    1|       m_axi|                                          gmem0|       pointer|
+|i0                      |   in|   31|     ap_none|                                             i0|        scalar|
+|N                       |   in|   31|     ap_none|                                              N|        scalar|
+|sext_ln43_3             |   in|   32|     ap_none|                                    sext_ln43_3|        scalar|
+|j0                      |   in|   31|     ap_none|                                             j0|        scalar|
+|M                       |   in|   32|     ap_none|                                              M|        scalar|
+|localC_256              |   in|   32|     ap_none|                                     localC_256|        scalar|
+|localC_257              |   in|   32|     ap_none|                                     localC_257|        scalar|
+|localC_258              |   in|   32|     ap_none|                                     localC_258|        scalar|
+|localC_259              |   in|   32|     ap_none|                                     localC_259|        scalar|
+|localC_260              |   in|   32|     ap_none|                                     localC_260|        scalar|
+|localC_261              |   in|   32|     ap_none|                                     localC_261|        scalar|
+|localC_262              |   in|   32|     ap_none|                                     localC_262|        scalar|
+|localC_263              |   in|   32|     ap_none|                                     localC_263|        scalar|
+|localC_264              |   in|   32|     ap_none|                                     localC_264|        scalar|
+|localC_265              |   in|   32|     ap_none|                                     localC_265|        scalar|
+|localC_266              |   in|   32|     ap_none|                                     localC_266|        scalar|
+|localC_267              |   in|   32|     ap_none|                                     localC_267|        scalar|
+|localC_268              |   in|   32|     ap_none|                                     localC_268|        scalar|
+|localC_269              |   in|   32|     ap_none|                                     localC_269|        scalar|
+|localC_270              |   in|   32|     ap_none|                                     localC_270|        scalar|
+|localC_271              |   in|   32|     ap_none|                                     localC_271|        scalar|
+|localC_272              |   in|   32|     ap_none|                                     localC_272|        scalar|
+|localC_273              |   in|   32|     ap_none|                                     localC_273|        scalar|
+|localC_274              |   in|   32|     ap_none|                                     localC_274|        scalar|
+|localC_275              |   in|   32|     ap_none|                                     localC_275|        scalar|
+|localC_276              |   in|   32|     ap_none|                                     localC_276|        scalar|
+|localC_277              |   in|   32|     ap_none|                                     localC_277|        scalar|
+|localC_278              |   in|   32|     ap_none|                                     localC_278|        scalar|
+|localC_279              |   in|   32|     ap_none|                                     localC_279|        scalar|
+|localC_280              |   in|   32|     ap_none|                                     localC_280|        scalar|
+|localC_281              |   in|   32|     ap_none|                                     localC_281|        scalar|
+|localC_282              |   in|   32|     ap_none|                                     localC_282|        scalar|
+|localC_283              |   in|   32|     ap_none|                                     localC_283|        scalar|
+|localC_284              |   in|   32|     ap_none|                                     localC_284|        scalar|
+|localC_285              |   in|   32|     ap_none|                                     localC_285|        scalar|
+|localC_286              |   in|   32|     ap_none|                                     localC_286|        scalar|
+|localC_287              |   in|   32|     ap_none|                                     localC_287|        scalar|
+|localC_288              |   in|   32|     ap_none|                                     localC_288|        scalar|
+|localC_289              |   in|   32|     ap_none|                                     localC_289|        scalar|
+|localC_290              |   in|   32|     ap_none|                                     localC_290|        scalar|
+|localC_291              |   in|   32|     ap_none|                                     localC_291|        scalar|
+|localC_292              |   in|   32|     ap_none|                                     localC_292|        scalar|
+|localC_293              |   in|   32|     ap_none|                                     localC_293|        scalar|
+|localC_294              |   in|   32|     ap_none|                                     localC_294|        scalar|
+|localC_295              |   in|   32|     ap_none|                                     localC_295|        scalar|
+|localC_296              |   in|   32|     ap_none|                                     localC_296|        scalar|
+|localC_297              |   in|   32|     ap_none|                                     localC_297|        scalar|
+|localC_298              |   in|   32|     ap_none|                                     localC_298|        scalar|
+|localC_299              |   in|   32|     ap_none|                                     localC_299|        scalar|
+|localC_300              |   in|   32|     ap_none|                                     localC_300|        scalar|
+|localC_301              |   in|   32|     ap_none|                                     localC_301|        scalar|
+|localC_302              |   in|   32|     ap_none|                                     localC_302|        scalar|
+|localC_303              |   in|   32|     ap_none|                                     localC_303|        scalar|
+|localC_304              |   in|   32|     ap_none|                                     localC_304|        scalar|
+|localC_305              |   in|   32|     ap_none|                                     localC_305|        scalar|
+|localC_306              |   in|   32|     ap_none|                                     localC_306|        scalar|
+|localC_307              |   in|   32|     ap_none|                                     localC_307|        scalar|
+|localC_308              |   in|   32|     ap_none|                                     localC_308|        scalar|
+|localC_309              |   in|   32|     ap_none|                                     localC_309|        scalar|
+|localC_310              |   in|   32|     ap_none|                                     localC_310|        scalar|
+|localC_311              |   in|   32|     ap_none|                                     localC_311|        scalar|
+|localC_312              |   in|   32|     ap_none|                                     localC_312|        scalar|
+|localC_313              |   in|   32|     ap_none|                                     localC_313|        scalar|
+|localC_314              |   in|   32|     ap_none|                                     localC_314|        scalar|
+|localC_315              |   in|   32|     ap_none|                                     localC_315|        scalar|
+|localC_316              |   in|   32|     ap_none|                                     localC_316|        scalar|
+|localC_317              |   in|   32|     ap_none|                                     localC_317|        scalar|
+|localC_318              |   in|   32|     ap_none|                                     localC_318|        scalar|
+|localC_319              |   in|   32|     ap_none|                                     localC_319|        scalar|
+|localC_320              |   in|   32|     ap_none|                                     localC_320|        scalar|
+|localC_321              |   in|   32|     ap_none|                                     localC_321|        scalar|
+|localC_322              |   in|   32|     ap_none|                                     localC_322|        scalar|
+|localC_323              |   in|   32|     ap_none|                                     localC_323|        scalar|
+|localC_324              |   in|   32|     ap_none|                                     localC_324|        scalar|
+|localC_325              |   in|   32|     ap_none|                                     localC_325|        scalar|
+|localC_326              |   in|   32|     ap_none|                                     localC_326|        scalar|
+|localC_327              |   in|   32|     ap_none|                                     localC_327|        scalar|
+|localC_328              |   in|   32|     ap_none|                                     localC_328|        scalar|
+|localC_329              |   in|   32|     ap_none|                                     localC_329|        scalar|
+|localC_330              |   in|   32|     ap_none|                                     localC_330|        scalar|
+|localC_331              |   in|   32|     ap_none|                                     localC_331|        scalar|
+|localC_332              |   in|   32|     ap_none|                                     localC_332|        scalar|
+|localC_333              |   in|   32|     ap_none|                                     localC_333|        scalar|
+|localC_334              |   in|   32|     ap_none|                                     localC_334|        scalar|
+|localC_335              |   in|   32|     ap_none|                                     localC_335|        scalar|
+|localC_336              |   in|   32|     ap_none|                                     localC_336|        scalar|
+|localC_337              |   in|   32|     ap_none|                                     localC_337|        scalar|
+|localC_338              |   in|   32|     ap_none|                                     localC_338|        scalar|
+|localC_339              |   in|   32|     ap_none|                                     localC_339|        scalar|
+|localC_340              |   in|   32|     ap_none|                                     localC_340|        scalar|
+|localC_341              |   in|   32|     ap_none|                                     localC_341|        scalar|
+|localC_342              |   in|   32|     ap_none|                                     localC_342|        scalar|
+|localC_343              |   in|   32|     ap_none|                                     localC_343|        scalar|
+|localC_344              |   in|   32|     ap_none|                                     localC_344|        scalar|
+|localC_345              |   in|   32|     ap_none|                                     localC_345|        scalar|
+|localC_346              |   in|   32|     ap_none|                                     localC_346|        scalar|
+|localC_347              |   in|   32|     ap_none|                                     localC_347|        scalar|
+|localC_348              |   in|   32|     ap_none|                                     localC_348|        scalar|
+|localC_349              |   in|   32|     ap_none|                                     localC_349|        scalar|
+|localC_350              |   in|   32|     ap_none|                                     localC_350|        scalar|
+|localC_351              |   in|   32|     ap_none|                                     localC_351|        scalar|
+|localC_352              |   in|   32|     ap_none|                                     localC_352|        scalar|
+|localC_353              |   in|   32|     ap_none|                                     localC_353|        scalar|
+|localC_354              |   in|   32|     ap_none|                                     localC_354|        scalar|
+|localC_355              |   in|   32|     ap_none|                                     localC_355|        scalar|
+|localC_356              |   in|   32|     ap_none|                                     localC_356|        scalar|
+|localC_357              |   in|   32|     ap_none|                                     localC_357|        scalar|
+|localC_358              |   in|   32|     ap_none|                                     localC_358|        scalar|
+|localC_359              |   in|   32|     ap_none|                                     localC_359|        scalar|
+|localC_360              |   in|   32|     ap_none|                                     localC_360|        scalar|
+|localC_361              |   in|   32|     ap_none|                                     localC_361|        scalar|
+|localC_362              |   in|   32|     ap_none|                                     localC_362|        scalar|
+|localC_363              |   in|   32|     ap_none|                                     localC_363|        scalar|
+|localC_364              |   in|   32|     ap_none|                                     localC_364|        scalar|
+|localC_365              |   in|   32|     ap_none|                                     localC_365|        scalar|
+|localC_366              |   in|   32|     ap_none|                                     localC_366|        scalar|
+|localC_367              |   in|   32|     ap_none|                                     localC_367|        scalar|
+|localC_368              |   in|   32|     ap_none|                                     localC_368|        scalar|
+|localC_369              |   in|   32|     ap_none|                                     localC_369|        scalar|
+|localC_370              |   in|   32|     ap_none|                                     localC_370|        scalar|
+|localC_371              |   in|   32|     ap_none|                                     localC_371|        scalar|
+|localC_372              |   in|   32|     ap_none|                                     localC_372|        scalar|
+|localC_373              |   in|   32|     ap_none|                                     localC_373|        scalar|
+|localC_374              |   in|   32|     ap_none|                                     localC_374|        scalar|
+|localC_375              |   in|   32|     ap_none|                                     localC_375|        scalar|
+|localC_376              |   in|   32|     ap_none|                                     localC_376|        scalar|
+|localC_377              |   in|   32|     ap_none|                                     localC_377|        scalar|
+|localC_378              |   in|   32|     ap_none|                                     localC_378|        scalar|
+|localC_379              |   in|   32|     ap_none|                                     localC_379|        scalar|
+|localC_380              |   in|   32|     ap_none|                                     localC_380|        scalar|
+|localC_381              |   in|   32|     ap_none|                                     localC_381|        scalar|
+|localC_382              |   in|   32|     ap_none|                                     localC_382|        scalar|
+|localC_383              |   in|   32|     ap_none|                                     localC_383|        scalar|
+|localC_384              |   in|   32|     ap_none|                                     localC_384|        scalar|
+|localC_385              |   in|   32|     ap_none|                                     localC_385|        scalar|
+|localC_386              |   in|   32|     ap_none|                                     localC_386|        scalar|
+|localC_387              |   in|   32|     ap_none|                                     localC_387|        scalar|
+|localC_388              |   in|   32|     ap_none|                                     localC_388|        scalar|
+|localC_389              |   in|   32|     ap_none|                                     localC_389|        scalar|
+|localC_390              |   in|   32|     ap_none|                                     localC_390|        scalar|
+|localC_391              |   in|   32|     ap_none|                                     localC_391|        scalar|
+|localC_392              |   in|   32|     ap_none|                                     localC_392|        scalar|
+|localC_393              |   in|   32|     ap_none|                                     localC_393|        scalar|
+|localC_394              |   in|   32|     ap_none|                                     localC_394|        scalar|
+|localC_395              |   in|   32|     ap_none|                                     localC_395|        scalar|
+|localC_396              |   in|   32|     ap_none|                                     localC_396|        scalar|
+|localC_397              |   in|   32|     ap_none|                                     localC_397|        scalar|
+|localC_398              |   in|   32|     ap_none|                                     localC_398|        scalar|
+|localC_399              |   in|   32|     ap_none|                                     localC_399|        scalar|
+|localC_400              |   in|   32|     ap_none|                                     localC_400|        scalar|
+|localC_401              |   in|   32|     ap_none|                                     localC_401|        scalar|
+|localC_402              |   in|   32|     ap_none|                                     localC_402|        scalar|
+|localC_403              |   in|   32|     ap_none|                                     localC_403|        scalar|
+|localC_404              |   in|   32|     ap_none|                                     localC_404|        scalar|
+|localC_405              |   in|   32|     ap_none|                                     localC_405|        scalar|
+|localC_406              |   in|   32|     ap_none|                                     localC_406|        scalar|
+|localC_407              |   in|   32|     ap_none|                                     localC_407|        scalar|
+|localC_408              |   in|   32|     ap_none|                                     localC_408|        scalar|
+|localC_409              |   in|   32|     ap_none|                                     localC_409|        scalar|
+|localC_410              |   in|   32|     ap_none|                                     localC_410|        scalar|
+|localC_411              |   in|   32|     ap_none|                                     localC_411|        scalar|
+|localC_412              |   in|   32|     ap_none|                                     localC_412|        scalar|
+|localC_413              |   in|   32|     ap_none|                                     localC_413|        scalar|
+|localC_414              |   in|   32|     ap_none|                                     localC_414|        scalar|
+|localC_415              |   in|   32|     ap_none|                                     localC_415|        scalar|
+|localC_416              |   in|   32|     ap_none|                                     localC_416|        scalar|
+|localC_417              |   in|   32|     ap_none|                                     localC_417|        scalar|
+|localC_418              |   in|   32|     ap_none|                                     localC_418|        scalar|
+|localC_419              |   in|   32|     ap_none|                                     localC_419|        scalar|
+|localC_420              |   in|   32|     ap_none|                                     localC_420|        scalar|
+|localC_421              |   in|   32|     ap_none|                                     localC_421|        scalar|
+|localC_422              |   in|   32|     ap_none|                                     localC_422|        scalar|
+|localC_423              |   in|   32|     ap_none|                                     localC_423|        scalar|
+|localC_424              |   in|   32|     ap_none|                                     localC_424|        scalar|
+|localC_425              |   in|   32|     ap_none|                                     localC_425|        scalar|
+|localC_426              |   in|   32|     ap_none|                                     localC_426|        scalar|
+|localC_427              |   in|   32|     ap_none|                                     localC_427|        scalar|
+|localC_428              |   in|   32|     ap_none|                                     localC_428|        scalar|
+|localC_429              |   in|   32|     ap_none|                                     localC_429|        scalar|
+|localC_430              |   in|   32|     ap_none|                                     localC_430|        scalar|
+|localC_431              |   in|   32|     ap_none|                                     localC_431|        scalar|
+|localC_432              |   in|   32|     ap_none|                                     localC_432|        scalar|
+|localC_433              |   in|   32|     ap_none|                                     localC_433|        scalar|
+|localC_434              |   in|   32|     ap_none|                                     localC_434|        scalar|
+|localC_435              |   in|   32|     ap_none|                                     localC_435|        scalar|
+|localC_436              |   in|   32|     ap_none|                                     localC_436|        scalar|
+|localC_437              |   in|   32|     ap_none|                                     localC_437|        scalar|
+|localC_438              |   in|   32|     ap_none|                                     localC_438|        scalar|
+|localC_439              |   in|   32|     ap_none|                                     localC_439|        scalar|
+|localC_440              |   in|   32|     ap_none|                                     localC_440|        scalar|
+|localC_441              |   in|   32|     ap_none|                                     localC_441|        scalar|
+|localC_442              |   in|   32|     ap_none|                                     localC_442|        scalar|
+|localC_443              |   in|   32|     ap_none|                                     localC_443|        scalar|
+|localC_444              |   in|   32|     ap_none|                                     localC_444|        scalar|
+|localC_445              |   in|   32|     ap_none|                                     localC_445|        scalar|
+|localC_446              |   in|   32|     ap_none|                                     localC_446|        scalar|
+|localC_447              |   in|   32|     ap_none|                                     localC_447|        scalar|
+|localC_448              |   in|   32|     ap_none|                                     localC_448|        scalar|
+|localC_449              |   in|   32|     ap_none|                                     localC_449|        scalar|
+|localC_450              |   in|   32|     ap_none|                                     localC_450|        scalar|
+|localC_451              |   in|   32|     ap_none|                                     localC_451|        scalar|
+|localC_452              |   in|   32|     ap_none|                                     localC_452|        scalar|
+|localC_453              |   in|   32|     ap_none|                                     localC_453|        scalar|
+|localC_454              |   in|   32|     ap_none|                                     localC_454|        scalar|
+|localC_455              |   in|   32|     ap_none|                                     localC_455|        scalar|
+|localC_456              |   in|   32|     ap_none|                                     localC_456|        scalar|
+|localC_457              |   in|   32|     ap_none|                                     localC_457|        scalar|
+|localC_458              |   in|   32|     ap_none|                                     localC_458|        scalar|
+|localC_459              |   in|   32|     ap_none|                                     localC_459|        scalar|
+|localC_460              |   in|   32|     ap_none|                                     localC_460|        scalar|
+|localC_461              |   in|   32|     ap_none|                                     localC_461|        scalar|
+|localC_462              |   in|   32|     ap_none|                                     localC_462|        scalar|
+|localC_463              |   in|   32|     ap_none|                                     localC_463|        scalar|
+|localC_464              |   in|   32|     ap_none|                                     localC_464|        scalar|
+|localC_465              |   in|   32|     ap_none|                                     localC_465|        scalar|
+|localC_466              |   in|   32|     ap_none|                                     localC_466|        scalar|
+|localC_467              |   in|   32|     ap_none|                                     localC_467|        scalar|
+|localC_468              |   in|   32|     ap_none|                                     localC_468|        scalar|
+|localC_469              |   in|   32|     ap_none|                                     localC_469|        scalar|
+|localC_470              |   in|   32|     ap_none|                                     localC_470|        scalar|
+|localC_471              |   in|   32|     ap_none|                                     localC_471|        scalar|
+|localC_472              |   in|   32|     ap_none|                                     localC_472|        scalar|
+|localC_473              |   in|   32|     ap_none|                                     localC_473|        scalar|
+|localC_474              |   in|   32|     ap_none|                                     localC_474|        scalar|
+|localC_475              |   in|   32|     ap_none|                                     localC_475|        scalar|
+|localC_476              |   in|   32|     ap_none|                                     localC_476|        scalar|
+|localC_477              |   in|   32|     ap_none|                                     localC_477|        scalar|
+|localC_478              |   in|   32|     ap_none|                                     localC_478|        scalar|
+|localC_479              |   in|   32|     ap_none|                                     localC_479|        scalar|
+|localC_480              |   in|   32|     ap_none|                                     localC_480|        scalar|
+|localC_481              |   in|   32|     ap_none|                                     localC_481|        scalar|
+|localC_482              |   in|   32|     ap_none|                                     localC_482|        scalar|
+|localC_483              |   in|   32|     ap_none|                                     localC_483|        scalar|
+|localC_484              |   in|   32|     ap_none|                                     localC_484|        scalar|
+|localC_485              |   in|   32|     ap_none|                                     localC_485|        scalar|
+|localC_486              |   in|   32|     ap_none|                                     localC_486|        scalar|
+|localC_487              |   in|   32|     ap_none|                                     localC_487|        scalar|
+|localC_488              |   in|   32|     ap_none|                                     localC_488|        scalar|
+|localC_489              |   in|   32|     ap_none|                                     localC_489|        scalar|
+|localC_490              |   in|   32|     ap_none|                                     localC_490|        scalar|
+|localC_491              |   in|   32|     ap_none|                                     localC_491|        scalar|
+|localC_492              |   in|   32|     ap_none|                                     localC_492|        scalar|
+|localC_493              |   in|   32|     ap_none|                                     localC_493|        scalar|
+|localC_494              |   in|   32|     ap_none|                                     localC_494|        scalar|
+|localC_495              |   in|   32|     ap_none|                                     localC_495|        scalar|
+|localC_496              |   in|   32|     ap_none|                                     localC_496|        scalar|
+|localC_497              |   in|   32|     ap_none|                                     localC_497|        scalar|
+|localC_498              |   in|   32|     ap_none|                                     localC_498|        scalar|
+|localC_499              |   in|   32|     ap_none|                                     localC_499|        scalar|
+|localC_500              |   in|   32|     ap_none|                                     localC_500|        scalar|
+|localC_501              |   in|   32|     ap_none|                                     localC_501|        scalar|
+|localC_502              |   in|   32|     ap_none|                                     localC_502|        scalar|
+|localC_503              |   in|   32|     ap_none|                                     localC_503|        scalar|
+|localC_504              |   in|   32|     ap_none|                                     localC_504|        scalar|
+|localC_505              |   in|   32|     ap_none|                                     localC_505|        scalar|
+|localC_506              |   in|   32|     ap_none|                                     localC_506|        scalar|
+|localC_507              |   in|   32|     ap_none|                                     localC_507|        scalar|
+|localC_508              |   in|   32|     ap_none|                                     localC_508|        scalar|
+|localC_509              |   in|   32|     ap_none|                                     localC_509|        scalar|
+|localC_510              |   in|   32|     ap_none|                                     localC_510|        scalar|
+|localC_511              |   in|   32|     ap_none|                                     localC_511|        scalar|
+|C                       |   in|   64|     ap_none|                                              C|        scalar|
++------------------------+-----+-----+------------+-----------------------------------------------+--------------+
+
