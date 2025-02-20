@@ -2,20 +2,30 @@
 #include <hls_stream.h>
 #include <stdint.h>
 
-// Matrix dimensions are given at runtime via AXI4-Lite,
-// but we fix the systolic array tile size as 16:
+// 定义最大矩阵尺寸（注意BRAM资源限制）
+#define MAX_N 64
+#define MAX_K 768
+#define MAX_M 768
+
+
+// 定义 B 分块的宽度
+#define BLOCK_M 256
+
+// Matrix tile size 固定为16
 const int TILE_SIZE = 16;
 
-// Top-level HLS function for matrix multiplication accelerator
 extern "C"
 {
     void mmult_accel(const int8_t *A, const int8_t *B, int32_t *C,
                      int N, int K, int M)
     {
-// HLS interface pragmas for AXI4 master and AXI4-Lite
-#pragma HLS INTERFACE m_axi port = A offset = slave bundle = gmem0 depth = 256
-#pragma HLS INTERFACE m_axi port = B offset = slave bundle = gmem0 depth = 256
-#pragma HLS INTERFACE m_axi port = C offset = slave bundle = gmem0 depth = 256
+        // HLS 接口配置
+// #pragma HLS INTERFACE m_axi port = A offset = slave bundle = gmemA depth = 256
+// #pragma HLS INTERFACE m_axi port = B offset = slave bundle = gmemB depth = 256
+// #pragma HLS INTERFACE m_axi port = C offset = slave bundle = gmemC depth = 256
+#pragma HLS INTERFACE m_axi port = A offset = slave bundle = gmemA depth = 49152
+#pragma HLS INTERFACE m_axi port = B offset = slave bundle = gmemB depth = 589824
+#pragma HLS INTERFACE m_axi port = C offset = slave bundle = gmemC depth = 49152
 #pragma HLS INTERFACE s_axilite port = A bundle = control
 #pragma HLS INTERFACE s_axilite port = B bundle = control
 #pragma HLS INTERFACE s_axilite port = C bundle = control
@@ -24,250 +34,130 @@ extern "C"
 #pragma HLS INTERFACE s_axilite port = M bundle = control
 #pragma HLS INTERFACE s_axilite port = return bundle = control
 
-        // Local buffers for a 16x16 tile of A, B, and C.
-        // Double-buffering for A and B (ping-pong) and single buffer for C accumulation.
-        int8_t localA_ping[TILE_SIZE][TILE_SIZE];
-        int8_t localA_pong[TILE_SIZE][TILE_SIZE];
-        int8_t localB_ping[TILE_SIZE][TILE_SIZE];
-        int8_t localB_pong[TILE_SIZE][TILE_SIZE];
-        int32_t localC[TILE_SIZE][TILE_SIZE];
-#pragma HLS ARRAY_PARTITION variable = localA_ping dim = 1 complete
-#pragma HLS ARRAY_PARTITION variable = localA_pong dim = 1 complete
-#pragma HLS ARRAY_PARTITION variable = localB_ping dim = 2 complete
-#pragma HLS ARRAY_PARTITION variable = localB_pong dim = 2 complete
-#pragma HLS ARRAY_PARTITION variable = localC dim = 0 complete
-    // (localC dim=0 complete -> fully partition all dimensions)
+        // *********************************************
+        // 1. 将整个 A 矩阵复制到 on-chip BRAM
+        // *********************************************
+        int8_t A_bram[MAX_N][MAX_K];
+#pragma HLS BIND_STORAGE variable=A_bram type=ram_2p impl=bram
 
-    // Iterate over output tiles C[i0:i0+15][j0:j0+15]
-    tile_i:
-        for (int i0 = 0; i0 < N; i0 += TILE_SIZE)
-        {
-        tile_j:
-            for (int j0 = 0; j0 < M; j0 += TILE_SIZE)
-            {
-            // Initialize localC tile to 0
-            init_c:
-                for (int ii = 0; ii < TILE_SIZE; ++ii)
-                {
-#pragma HLS UNROLL
-                    for (int jj = 0; jj < TILE_SIZE; ++jj)
-                    {
-#pragma HLS UNROLL
-                        localC[ii][jj] = 0;
-                    }
+        copy_A:
+        for (int i = 0; i < N; i++) {
+            for (int k = 0; k < K; k++) {
+#pragma HLS PIPELINE II=1
+                A_bram[i][k] = A[i * K + k];
+            }
+        }
+
+        // *********************************************
+        // 2. 按列分块处理 B 与 C
+        // *********************************************
+        // 外层循环：按 BLOCK_M 分块处理 B 的列
+        outer_j_block:
+        for (int j_block = 0; j_block < M; j_block += BLOCK_M) {
+            // 当前块实际宽度（最后一块可能小于 BLOCK_M）
+            int current_block_M = ((j_block + BLOCK_M) <= M) ? BLOCK_M : (M - j_block);
+
+            // 定义局部 B 块缓冲区，尺寸为 [K][BLOCK_M]
+            int8_t B_local[MAX_K][BLOCK_M];
+#pragma HLS BIND_STORAGE variable=B_local type=ram_2p impl=bram
+
+            copy_B_block:
+            for (int k = 0; k < K; k++) {
+                for (int j = 0; j < current_block_M; j++) {
+#pragma HLS PIPELINE II=1
+                    B_local[k][j] = B[k * M + (j_block + j)];
                 }
+            }
 
-                // Ping-pong buffer management for K dimension tiles
-                bool usePing = true;
-                int k0 = 0;
-                // Preload the first A and B 16x16 tile into ping buffers
-                {
-                loadA_init:
-                    for (int ii = 0; ii < TILE_SIZE; ++ii)
-                    {
-                        for (int kk = 0; kk < TILE_SIZE; ++kk)
-                        {
-#pragma HLS PIPELINE II = 1
-                            // Global index in matrix A = (i0+ii, k0+kk)
-                            if (i0 + ii < N && k0 + kk < K)
-                                localA_ping[ii][kk] = A[(i0 + ii) * K + (k0 + kk)];
-                            else
-                                localA_ping[ii][kk] = 0; // zero-padding for out-of-bound
+            // *********************************************
+            // 3. 计算当前 B 块对应的 C 部分：C[:, j_block : j_block+current_block_M]
+            // *********************************************
+            // 按 TILE_SIZE 划分 A 的行和当前 B 块的列
+            tile_i:
+            for (int i0 = 0; i0 < N; i0 += TILE_SIZE) {
+                tile_j:
+                for (int j0 = 0; j0 < current_block_M; j0 += TILE_SIZE) {
+
+                    // 定义局部 C tile 缓冲区
+                    int32_t localC[TILE_SIZE][TILE_SIZE];
+#pragma HLS ARRAY_PARTITION variable=localC dim=0 complete
+
+                    // 初始化 C tile 为 0
+                    init_c:
+                    for (int ii = 0; ii < TILE_SIZE; ii++) {
+#pragma HLS UNROLL
+                        for (int jj = 0; jj < TILE_SIZE; jj++) {
+#pragma HLS UNROLL
+                            localC[ii][jj] = 0;
                         }
                     }
-                loadB_init:
-                    for (int kk = 0; kk < TILE_SIZE; ++kk)
-                    {
-                        for (int jj = 0; jj < TILE_SIZE; ++jj)
-                        {
-#pragma HLS PIPELINE II = 1
-                            // Global index in matrix B = (k0+kk, j0+jj)
-                            if (k0 + kk < K && j0 + jj < M)
-                                localB_ping[kk][jj] = B[(k0 + kk) * M + (j0 + jj)];
-                            else
-                                localB_ping[kk][jj] = 0;
-                        }
-                    }
-                }
-                // Advance k0 to first loaded tile size
-                k0 += TILE_SIZE;
-                usePing = false; // next, we'll use pong for loading
 
-                // Loop over K in chunks of 16 (tiles) and compute
-                while (k0 < K)
-                {
-                    // Load next tile of A and B into the buffer (pong if usePing is false, ping if true)
-                    if (usePing)
-                    {
-                    // Load into ping buffers (while compute will use pong)
-                    loadA_ping:
-                        for (int ii = 0; ii < TILE_SIZE; ++ii)
-                        {
-                            for (int kk = 0; kk < TILE_SIZE; ++kk)
-                            {
-#pragma HLS PIPELINE II = 1
+                    // 定义单一的局部 A、B tile 缓冲区
+                    int8_t localA[TILE_SIZE][TILE_SIZE];
+                    int8_t localB[TILE_SIZE][TILE_SIZE];
+#pragma HLS ARRAY_PARTITION variable=localA dim=1 complete
+#pragma HLS ARRAY_PARTITION variable=localB dim=2 complete
+
+                    // 遍历 K 维度，按 TILE_SIZE 划分，累加计算
+                    k_loop:
+                    for (int k0 = 0; k0 < K; k0 += TILE_SIZE) {
+                        // 加载 A tile 从 A_bram 到 localA
+                        loadA:
+                        for (int ii = 0; ii < TILE_SIZE; ii++) {
+                            for (int kk = 0; kk < TILE_SIZE; kk++) {
+#pragma HLS PIPELINE II=1
                                 int global_i = i0 + ii;
                                 int global_k = k0 + kk;
                                 if (global_i < N && global_k < K)
-                                    localA_ping[ii][kk] = A[global_i * K + global_k];
+                                    localA[ii][kk] = A_bram[global_i][global_k];
                                 else
-                                    localA_ping[ii][kk] = 0;
+                                    localA[ii][kk] = 0;
                             }
                         }
-                    loadB_ping:
-                        for (int kk = 0; kk < TILE_SIZE; ++kk)
-                        {
-                            for (int jj = 0; jj < TILE_SIZE; ++jj)
-                            {
-#pragma HLS PIPELINE II = 1
-                                int global_k = k0 + kk;
-                                int global_j = j0 + jj;
-                                if (global_k < K && global_j < M)
-                                    localB_ping[kk][jj] = B[global_k * M + global_j];
-                                else
-                                    localB_ping[kk][jj] = 0;
-                            }
-                        }
-                    }
-                    else
-                    {
-                    // Load into pong buffers (while compute will use ping)
-                    loadA_pong:
-                        for (int ii = 0; ii < TILE_SIZE; ++ii)
-                        {
-                            for (int kk = 0; kk < TILE_SIZE; ++kk)
-                            {
-#pragma HLS PIPELINE II = 1
-                                int global_i = i0 + ii;
-                                int global_k = k0 + kk;
-                                if (global_i < N && global_k < K)
-                                    localA_pong[ii][kk] = A[global_i * K + global_k];
-                                else
-                                    localA_pong[ii][kk] = 0;
-                            }
-                        }
-                    loadB_pong:
-                        for (int kk = 0; kk < TILE_SIZE; ++kk)
-                        {
-                            for (int jj = 0; jj < TILE_SIZE; ++jj)
-                            {
-#pragma HLS PIPELINE II = 1
-                                int global_k = k0 + kk;
-                                int global_j = j0 + jj;
-                                if (global_k < K && global_j < M)
-                                    localB_pong[kk][jj] = B[global_k * M + global_j];
-                                else
-                                    localB_pong[kk][jj] = 0;
-                            }
-                        }
-                    }
 
-                    // Compute multiplication on the previously loaded tile (ping or pong buffer)
-                    if (usePing)
-                    {
-                    // usePing true here means we just loaded ping, so compute on pong
-                    compute_pong:
-                        for (int kk = 0; kk < TILE_SIZE; ++kk)
-                        {
-#pragma HLS PIPELINE II = 1
-                            for (int ii = 0; ii < TILE_SIZE; ++ii)
-                            {
+                        // 加载 B tile 从 B_local 到 localB
+                        loadB:
+                        for (int kk = 0; kk < TILE_SIZE; kk++) {
+                            for (int jj = 0; jj < TILE_SIZE; jj++) {
+#pragma HLS PIPELINE II=1
+                                int global_k = k0 + kk;
+                                int global_j = j0 + jj;
+                                if (global_k < K && global_j < current_block_M)
+                                    localB[kk][jj] = B_local[global_k][global_j];
+                                else
+                                    localB[kk][jj] = 0;
+                            }
+                        }
+
+                        // 计算： localC += localA * localB
+                        compute:
+                        for (int kk = 0; kk < TILE_SIZE; kk++) {
+#pragma HLS PIPELINE II=1
+                            for (int ii = 0; ii < TILE_SIZE; ii++) {
 #pragma HLS UNROLL
-                                for (int jj = 0; jj < TILE_SIZE; ++jj)
-                                {
+                                for (int jj = 0; jj < TILE_SIZE; jj++) {
 #pragma HLS UNROLL
-                                    // MAC: localC[ii][jj] += localA_pong[ii][kk] * localB_pong[kk][jj];
-                                    int32_t a_val = (int32_t)localA_pong[ii][kk];
-                                    int32_t b_val = (int32_t)localB_pong[kk][jj];
+                                    int32_t a_val = (int32_t)localA[ii][kk];
+                                    int32_t b_val = (int32_t)localB[kk][jj];
                                     localC[ii][jj] += a_val * b_val;
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-                    // usePing false here means we just loaded pong, so compute on ping
-                    compute_ping:
-                        for (int kk = 0; kk < TILE_SIZE; ++kk)
-                        {
-#pragma HLS PIPELINE II = 1
-                            for (int ii = 0; ii < TILE_SIZE; ++ii)
-                            {
-#pragma HLS UNROLL
-                                for (int jj = 0; jj < TILE_SIZE; ++jj)
-                                {
-#pragma HLS UNROLL
-                                    int32_t a_val = (int32_t)localA_ping[ii][kk];
-                                    int32_t b_val = (int32_t)localB_ping[kk][jj];
-                                    localC[ii][jj] += a_val * b_val;
-                                }
-                            }
-                        }
-                    }
+                    } // end k_loop
 
-                    // Toggle buffer usage for next iteration and advance k0
-                    usePing = !usePing;
-                    k0 += TILE_SIZE;
-                } // end while for K tiles
-
-                // After the loop, one last tile remains computed but not yet accumulated if k0 == K
-                // We need to perform the compute for the last loaded tile (when K is a multiple of 16, the last tile compute happens here).
-                if (!usePing)
-                {
-                // If usePing is false, it means the last loaded tile data is in ping (because we toggled one extra time at loop exit),
-                // so compute with ping data:
-                compute_last_ping:
-                    for (int kk = 0; kk < TILE_SIZE; ++kk)
-                    {
-#pragma HLS PIPELINE II = 1
-                        for (int ii = 0; ii < TILE_SIZE; ++ii)
-                        {
-#pragma HLS UNROLL
-                            for (int jj = 0; jj < TILE_SIZE; ++jj)
-                            {
-#pragma HLS UNROLL
-                                int32_t a_val = (int32_t)localA_ping[ii][kk];
-                                int32_t b_val = (int32_t)localB_ping[kk][jj];
-                                localC[ii][jj] += a_val * b_val;
-                            }
+                    // 将计算结果写回 DDR（写回时注意偏移 j_block）
+                    writeC:
+                    for (int ii = 0; ii < TILE_SIZE; ii++) {
+                        for (int jj = 0; jj < TILE_SIZE; jj++) {
+#pragma HLS PIPELINE II=1
+                            int global_i = i0 + ii;
+                            int global_j = j0 + jj;
+                            if (global_i < N && global_j < current_block_M)
+                                C[global_i * M + (j_block + global_j)] = localC[ii][jj];
                         }
                     }
                 }
-                else
-                {
-                // If usePing is true, the last loaded tile is in pong buffer
-                compute_last_pong:
-                    for (int kk = 0; kk < TILE_SIZE; ++kk)
-                    {
-#pragma HLS PIPELINE II = 1
-                        for (int ii = 0; ii < TILE_SIZE; ++ii)
-                        {
-#pragma HLS UNROLL
-                            for (int jj = 0; jj < TILE_SIZE; ++jj)
-                            {
-#pragma HLS UNROLL
-                                int32_t a_val = (int32_t)localA_pong[ii][kk];
-                                int32_t b_val = (int32_t)localB_pong[kk][jj];
-                                localC[ii][jj] += a_val * b_val;
-                            }
-                        }
-                    }
-                }
-
-            // Write the 16x16 result tile from localC back to global memory C
-            writeC:
-                for (int ii = 0; ii < TILE_SIZE; ++ii)
-                {
-                    for (int jj = 0; jj < TILE_SIZE; ++jj)
-                    {
-#pragma HLS PIPELINE II = 1
-                        if (i0 + ii < N && j0 + jj < M)
-                        {
-                            C[(i0 + ii) * M + (j0 + jj)] = localC[ii][jj];
-                        }
-                    }
-                }
-            } // tile_j
-        } // tile_i
-    } // mmult_accel
-} // extern "C"
+            }
+        }
+    }
+}
