@@ -17,7 +17,13 @@
 .pdi
 .vitisWorkspace.json
 
-_ide/logs
-_ide/.wsdata
+_ide/
 
 .vscode/
+
+# Ignore everything in the MatMul_SA folder
+/MatMul_SA/*
+
+# Except for the hls/syn/report directory
+!/MatMul_SA/MatMul_SA/hls/syn/report
+!/MatMul_SA/MatMul_SA/hls/syn/report/*
