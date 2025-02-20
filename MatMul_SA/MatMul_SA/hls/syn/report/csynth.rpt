@@ -4,7 +4,7 @@
 == Synthesis Summary Report of 'mmult_accel'
 ================================================================
 + General Information: 
-    * Date:           Wed Feb 19 13:17:36 2025
+    * Date:           Wed Feb 19 19:20:30 2025
     * Version:        2024.2 (Build 5238294 on Nov  8 2024)
     * Project:        MatMul_SA
     * Solution:       hls (Vivado IP Flow Target)
@@ -1091,34 +1091,34 @@
 == Pragma Report
 ================================================================
 * Valid Pragma Syntax
-+-----------------+-------------------------------------------------------------+-----------------------------------------------+
-| Type            | Options                                                     | Location                                      |
-+-----------------+-------------------------------------------------------------+-----------------------------------------------+
-| interface       | m_axi port = A offset = slave bundle = gmemA depth = 49152  | ../mmult_accel.cpp:26 in mmult_accel          |
-| interface       | m_axi port = B offset = slave bundle = gmemB depth = 589824 | ../mmult_accel.cpp:27 in mmult_accel          |
-| interface       | m_axi port = C offset = slave bundle = gmemC depth = 49152  | ../mmult_accel.cpp:28 in mmult_accel          |
-| interface       | s_axilite port = A bundle = control                         | ../mmult_accel.cpp:29 in mmult_accel          |
-| interface       | s_axilite port = B bundle = control                         | ../mmult_accel.cpp:30 in mmult_accel          |
-| interface       | s_axilite port = C bundle = control                         | ../mmult_accel.cpp:31 in mmult_accel          |
-| interface       | s_axilite port = N bundle = control                         | ../mmult_accel.cpp:32 in mmult_accel          |
-| interface       | s_axilite port = K bundle = control                         | ../mmult_accel.cpp:33 in mmult_accel          |
-| interface       | s_axilite port = M bundle = control                         | ../mmult_accel.cpp:34 in mmult_accel          |
-| interface       | s_axilite port = return bundle = control                    | ../mmult_accel.cpp:35 in mmult_accel          |
-| bind_storage    | variable=A_bram type=ram_2p impl=bram                       | ../mmult_accel.cpp:41 in mmult_accel, A_bram  |
-| pipeline        | II=1                                                        | ../mmult_accel.cpp:46 in mmult_accel          |
-| bind_storage    | variable=B_local type=ram_2p impl=bram                      | ../mmult_accel.cpp:62 in mmult_accel, B_local |
-| pipeline        | II=1                                                        | ../mmult_accel.cpp:67 in mmult_accel          |
-| array_partition | variable=localC dim=0 complete                              | ../mmult_accel.cpp:83 in mmult_accel, localC  |
-| unroll          |                                                             | ../mmult_accel.cpp:88 in mmult_accel          |
-| unroll          |                                                             | ../mmult_accel.cpp:90 in mmult_accel          |
-| array_partition | variable=localA dim=1 complete                              | ../mmult_accel.cpp:98 in mmult_accel, localA  |
-| array_partition | variable=localB dim=2 complete                              | ../mmult_accel.cpp:99 in mmult_accel, localB  |
-| pipeline        | II=1                                                        | ../mmult_accel.cpp:108 in mmult_accel         |
-| pipeline        | II=1                                                        | ../mmult_accel.cpp:122 in mmult_accel         |
-| pipeline        | II=1                                                        | ../mmult_accel.cpp:135 in mmult_accel         |
-| unroll          |                                                             | ../mmult_accel.cpp:137 in mmult_accel         |
-| unroll          |                                                             | ../mmult_accel.cpp:139 in mmult_accel         |
-| pipeline        | II=1                                                        | ../mmult_accel.cpp:152 in mmult_accel         |
-+-----------------+-------------------------------------------------------------+-----------------------------------------------+
++-----------------+----------------------------------------------------------------+-----------------------------------------------+
+| Type            | Options                                                        | Location                                      |
++-----------------+----------------------------------------------------------------+-----------------------------------------------+
+| interface       | m_axi port = A offset = slave bundle = gmemA depth = 64 * 768  | ../mmult_accel.cpp:26 in mmult_accel          |
+| interface       | m_axi port = B offset = slave bundle = gmemB depth = 768 * 768 | ../mmult_accel.cpp:27 in mmult_accel          |
+| interface       | m_axi port = C offset = slave bundle = gmemC depth = 64 * 768  | ../mmult_accel.cpp:28 in mmult_accel          |
+| interface       | s_axilite port = A bundle = control                            | ../mmult_accel.cpp:29 in mmult_accel          |
+| interface       | s_axilite port = B bundle = control                            | ../mmult_accel.cpp:30 in mmult_accel          |
+| interface       | s_axilite port = C bundle = control                            | ../mmult_accel.cpp:31 in mmult_accel          |
+| interface       | s_axilite port = N bundle = control                            | ../mmult_accel.cpp:32 in mmult_accel          |
+| interface       | s_axilite port = K bundle = control                            | ../mmult_accel.cpp:33 in mmult_accel          |
+| interface       | s_axilite port = M bundle = control                            | ../mmult_accel.cpp:34 in mmult_accel          |
+| interface       | s_axilite port = return bundle = control                       | ../mmult_accel.cpp:35 in mmult_accel          |
+| bind_storage    | variable=A_bram type=ram_2p impl=bram                          | ../mmult_accel.cpp:41 in mmult_accel, A_bram  |
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:46 in mmult_accel          |
+| bind_storage    | variable=B_local type=ram_2p impl=bram                         | ../mmult_accel.cpp:62 in mmult_accel, B_local |
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:67 in mmult_accel          |
+| array_partition | variable=localC dim=0 complete                                 | ../mmult_accel.cpp:83 in mmult_accel, localC  |
+| unroll          |                                                                | ../mmult_accel.cpp:88 in mmult_accel          |
+| unroll          |                                                                | ../mmult_accel.cpp:90 in mmult_accel          |
+| array_partition | variable=localA dim=1 complete                                 | ../mmult_accel.cpp:98 in mmult_accel, localA  |
+| array_partition | variable=localB dim=2 complete                                 | ../mmult_accel.cpp:99 in mmult_accel, localB  |
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:108 in mmult_accel         |
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:122 in mmult_accel         |
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:135 in mmult_accel         |
+| unroll          |                                                                | ../mmult_accel.cpp:137 in mmult_accel         |
+| unroll          |                                                                | ../mmult_accel.cpp:139 in mmult_accel         |
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:152 in mmult_accel         |
++-----------------+----------------------------------------------------------------+-----------------------------------------------+
 
 
