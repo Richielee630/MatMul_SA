@@ -1,9 +1,10 @@
 //
 // mmult_accel_tb.cpp
 //
-// Updated testbench to check if the mmult_accel function computes results correctly.
-// This testbench allocates memory matching the maximum interface depth but only initializes and verifies the actual size region (N, K, M).
-// This avoids out-of-bounds issues during cosimulation due to insufficient memory allocation.
+// Updated testbench to check if the mmult_accel function computes results correctly,
+// and to test the newly added update_A feature by mimicking real Q, K, V projections.
+// The testbench allocates memory matching the maximum interface depth but only
+// initializes and verifies the actual size region (N, K, M) to avoid out-of-bounds issues.
 //
 #include <iostream>
 #include <cstdlib>
@@ -46,16 +47,14 @@ int main()
         {16, 768, 768},
         {32, 768, 768},
         {64, 768, 768},
-        // {64, 64, 768},
-        // {64, 768, 3072}
     };
     const int num_tests = sizeof(test_cases) / sizeof(TestCase);
     bool overall_pass = true;
 
     // Allocate memory for interface according to maximum depth:
-    const int maxA = MAX_N * MAX_K;      // 64 * 768 = 49152
-    const int maxB = MAX_K * MAX_M;      // 768 * 3072 = 2359296
-    const int maxC = MAX_N * MAX_M;      // 64 * 3072 = 196608
+    const int maxA = MAX_N * MAX_K;   // 64 * 768 = 49152
+    const int maxB = MAX_K * MAX_M;   // 768 * 768 = 589824 (if M=768)
+    const int maxC = MAX_N * MAX_M;   // 64 * 768 = 49152
 
     for (int t = 0; t < num_tests; t++) {
         int N = test_cases[t].N;
@@ -64,13 +63,18 @@ int main()
         std::cout << "Running test case " << t << ": N = " << N 
                   << ", K = " << K << ", M = " << M << std::endl;
 
-        // Allocate arrays with maximum depth
+        // Allocate arrays with maximum depth:
         int8_t *A = new int8_t[maxA];
-        int8_t *B = new int8_t[maxB];
+        // Allocate separate weight matrices for Q, K, V projections
+        int8_t *B_q = new int8_t[maxB];
+        int8_t *B_k = new int8_t[maxB];
+        int8_t *B_v = new int8_t[maxB];
+
+        // Allocate arrays for hardware and software results
         int32_t *C_hw = new int32_t[maxC];
         int32_t *C_sw = new int32_t[maxC];
 
-        // Initialize A: only the first N*K region is valid, other regions are set to 0
+        // Initialize A: only the first N*K region is valid; the rest is zeroed.
         srand(42 + t);
         for (int i = 0; i < N * K; i++) {
             A[i] = (int8_t)(rand() % 256 - 128);
@@ -79,46 +83,127 @@ int main()
             A[i] = 0;
         }
 
-        // Initialize B: only the first K*M region is valid, other regions are set to 0
+        // Initialize weight matrices for Q, K, V:
+        // For each, only the first K*M region is valid; the remainder is set to 0.
+        srand(100 + t); // Q projection weights
         for (int i = 0; i < K * M; i++) {
-            B[i] = (int8_t)(rand() % 256 - 128);
+            B_q[i] = (int8_t)(rand() % 256 - 128);
         }
         for (int i = K * M; i < maxB; i++) {
-            B[i] = 0;
+            B_q[i] = 0;
+        }
+        srand(200 + t); // K projection weights
+        for (int i = 0; i < K * M; i++) {
+            B_k[i] = (int8_t)(rand() % 256 - 128);
+        }
+        for (int i = K * M; i < maxB; i++) {
+            B_k[i] = 0;
+        }
+        srand(300 + t); // V projection weights
+        for (int i = 0; i < K * M; i++) {
+            B_v[i] = (int8_t)(rand() % 256 - 128);
+        }
+        for (int i = K * M; i < maxB; i++) {
+            B_v[i] = 0;
         }
 
-        // Set all elements of C arrays to 0
+        // Test flag for the entire test case
+        bool test_pass = true;
+
+        //--------------------------------------------------------------------------
+        // Q Projection: load A into BRAM (update_A=1) and use B_q
+        //--------------------------------------------------------------------------        
+        std::cout << "   Computing Q projection..." << std::endl;
+        // Zero out the output arrays for the valid region
         for (int i = 0; i < maxC; i++) {
             C_hw[i] = 0;
             C_sw[i] = 0;
         }
-
-        // Call CPU reference implementation (only compute the valid region: N, K, M)
-        reference_mmult(A, B, C_sw, N, K, M);
-        // Call hardware function (direct call in C-Simulation)
-        mmult_accel(A, B, C_hw, N, K, M);
-
-        // Compare the computation results in the valid region
-        bool pass = true;
+        // Compute reference result for Q
+        reference_mmult(A, B_q, C_sw, N, K, M);
+        // Call accelerator for Q with update_A=1 (i.e., load A into BRAM)
+        mmult_accel(A, B_q, C_hw, N, K, M, 1);
+        // Compare the results for Q
         for (int i = 0; i < N * M; i++) {
             if (C_hw[i] != C_sw[i]) {
-                pass = false;
-                std::cout << "Mismatch at index " << i 
+                test_pass = false;
+                std::cout << "   Q projection mismatch at index " << i 
                           << ": HW = " << C_hw[i] 
                           << ", SW = " << C_sw[i] << std::endl;
                 break;
             }
         }
-        if (pass) {
-            std::cout << "Test case " << t << " Passed." << std::endl;
-        } else {
-            std::cout << "Test case " << t << " Failed." << std::endl;
+        if (test_pass)
+            std::cout << "   Q projection Passed." << std::endl;
+        else {
+            std::cout << "   Q projection Failed." << std::endl;
             overall_pass = false;
         }
 
-        // Free memory
+        //--------------------------------------------------------------------------
+        // K Projection: reuse A in BRAM (update_A=0) and use B_k
+        //--------------------------------------------------------------------------
+        std::cout << "   Computing K projection..." << std::endl;
+        for (int i = 0; i < maxC; i++) {
+            C_hw[i] = 0;
+            C_sw[i] = 0;
+        }
+        reference_mmult(A, B_k, C_sw, N, K, M);
+        // Call accelerator for K with update_A=0 (reuse previously loaded A)
+        mmult_accel(A, B_k, C_hw, N, K, M, 0);
+        for (int i = 0; i < N * M; i++) {
+            if (C_hw[i] != C_sw[i]) {
+                test_pass = false;
+                std::cout << "   K projection mismatch at index " << i 
+                          << ": HW = " << C_hw[i] 
+                          << ", SW = " << C_sw[i] << std::endl;
+                break;
+            }
+        }
+        if (test_pass)
+            std::cout << "   K projection Passed." << std::endl;
+        else {
+            std::cout << "   K projection Failed." << std::endl;
+            overall_pass = false;
+        }
+
+        //--------------------------------------------------------------------------
+        // V Projection: reuse A in BRAM (update_A=0) and use B_v
+        //--------------------------------------------------------------------------
+        std::cout << "   Computing V projection..." << std::endl;
+        for (int i = 0; i < maxC; i++) {
+            C_hw[i] = 0;
+            C_sw[i] = 0;
+        }
+        reference_mmult(A, B_v, C_sw, N, K, M);
+        // Call accelerator for V with update_A=0 (again, reuse A from BRAM)
+        mmult_accel(A, B_v, C_hw, N, K, M, 0);
+        for (int i = 0; i < N * M; i++) {
+            if (C_hw[i] != C_sw[i]) {
+                test_pass = false;
+                std::cout << "   V projection mismatch at index " << i 
+                          << ": HW = " << C_hw[i] 
+                          << ", SW = " << C_sw[i] << std::endl;
+                break;
+            }
+        }
+        if (test_pass)
+            std::cout << "   V projection Passed." << std::endl;
+        else {
+            std::cout << "   V projection Failed." << std::endl;
+            overall_pass = false;
+        }
+
+        if(test_pass)
+            std::cout << "Test case " << t << " Passed." << std::endl;
+        else
+            std::cout << "Test case " << t << " Failed." << std::endl;
+
+        // Free memory for this test case
         delete[] A;
-        delete[] B;
+        delete[] B_q;
+        delete[] B_k;
+        delete[] B_v;
         delete[] C_hw;
         delete[] C_sw;
     }
