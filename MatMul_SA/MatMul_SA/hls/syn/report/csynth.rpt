@@ -4,7 +4,7 @@
 == Synthesis Summary Report of 'mmult_accel'
 ================================================================
 + General Information: 
-    * Date:           Thu Feb 20 00:27:12 2025
+    * Date:           Mon Feb 24 16:53:32 2025
     * Version:        2024.2 (Build 5238294 on Nov  8 2024)
     * Project:        MatMul_SA
     * Solution:       hls (Vivado IP Flow Target)
@@ -15,28 +15,35 @@
 + Performance & Resource Estimates: 
     
     PS: '+' for module; 'o' for loop; '*' for dataflow
-    +-------------------------------------------------------+------+------+-------------+-----------+-------------+---------+-----------+----------+-----------+-----------+------------+-------------+-----+
-    |                        Modules                        | Issue|      |   Latency   |  Latency  |  Iteration  |         |    Trip   |          |           |           |            |             |     |
-    |                        & Loops                        | Type | Slack|   (cycles)  |    (ns)   |   Latency   | Interval|   Count   | Pipelined|   BRAM    |    DSP    |     FF     |     LUT     | URAM|
-    +-------------------------------------------------------+------+------+-------------+-----------+-------------+---------+-----------+----------+-----------+-----------+------------+-------------+-----+
-    |+ mmult_accel                                          |     -|  0.00|            -|          -|            -|        -|          -|        no|  126 (43%)|  272 (21%)|  21057 (8%)|  15611 (13%)|    -|
-    | + mmult_accel_Pipeline_copy_A_VITIS_LOOP_44_1         |     -|  0.00|            -|          -|            -|        -|          -|        no|          -|          -|   141 (~0%)|    417 (~0%)|    -|
-    |  o copy_A_VITIS_LOOP_44_1                             |     -|  8.00|            -|          -|            3|        1|          -|       yes|          -|          -|           -|            -|    -|
-    | o outer_j_block                                       |     -|  8.00|            -|          -|            -|        -|          -|        no|          -|          -|           -|            -|    -|
-    |  + mmult_accel_Pipeline_copy_B_block_VITIS_LOOP_65_2  |     -|  0.00|            -|          -|            -|        -|          -|        no|          -|    4 (~0%)|   385 (~0%)|    602 (~0%)|    -|
-    |   o copy_B_block_VITIS_LOOP_65_2                      |     -|  8.00|            -|          -|           11|        1|          -|       yes|          -|          -|           -|            -|    -|
-    |  o tile_i                                             |     -|  8.00|            -|          -|            -|        -|          -|        no|          -|          -|           -|            -|    -|
-    |   o tile_j                                            |     -|  8.00|            -|          -|  76235669771|        -|          -|        no|          -|          -|           -|            -|    -|
-    |    + mmult_accel_Pipeline_writeC_VITIS_LOOP_150_8     |     -|  0.00|          264|  2.640e+03|            -|      264|          -|        no|          -|    4 (~0%)|   229 (~0%)|    1705 (1%)|    -|
-    |     o writeC_VITIS_LOOP_150_8                         |     -|  8.00|          262|  2.620e+03|            8|        1|        256|       yes|          -|          -|           -|            -|    -|
-    |    o k_loop                                           |     -|  8.00|  76235669504|  7.624e+11|          284|        -|  268435456|        no|          -|          -|           -|            -|    -|
-    |     + mmult_accel_Pipeline_loadA_VITIS_LOOP_106_4     |     -|  2.26|          258|  2.580e+03|            -|      258|          -|        no|          -|          -|    32 (~0%)|    383 (~0%)|    -|
-    |      o loadA_VITIS_LOOP_106_4                         |     -|  8.00|          256|  2.560e+03|            2|        1|        256|       yes|          -|          -|           -|            -|    -|
-    |     + mmult_accel_Pipeline_loadB_VITIS_LOOP_120_5     |     -|  3.25|          258|  2.580e+03|            -|      258|          -|        no|          -|          -|    32 (~0%)|    345 (~0%)|    -|
-    |      o loadB_VITIS_LOOP_120_5                         |     -|  8.00|          256|  2.560e+03|            2|        1|        256|       yes|          -|          -|           -|            -|    -|
-    |     + mmult_accel_Pipeline_compute                    |     -|  6.33|           21|    210.000|            -|       21|          -|        no|          -|  256 (20%)|   8271 (3%)|    4703 (4%)|    -|
-    |      o compute                                        |     -|  8.00|           19|    190.000|            5|        1|         16|       yes|          -|          -|           -|            -|    -|
-    +-------------------------------------------------------+------+------+-------------+-----------+-------------+---------+-----------+----------+-----------+-----------+------------+-------------+-----+
+    +------------------------------------------------------------------+------+------+--------------+-----------+--------------+---------+-----------+----------+----------+---------+------------+-------------+-----+
+    |                              Modules                             | Issue|      |   Latency    |  Latency  |   Iteration  |         |    Trip   |          |          |         |            |             |     |
+    |                              & Loops                             | Type | Slack|   (cycles)   |    (ns)   |    Latency   | Interval|   Count   | Pipelined|   BRAM   |   DSP   |     FF     |     LUT     | URAM|
+    +------------------------------------------------------------------+------+------+--------------+-----------+--------------+---------+-----------+----------+----------+---------+------------+-------------+-----+
+    |+ mmult_accel                                                     |     -|  0.00|             -|          -|             -|        -|          -|        no|  78 (27%)|  24 (1%)|  22244 (9%)|  17180 (14%)|    -|
+    | + mmult_accel_Pipeline_copy_A_VITIS_LOOP_132_1                   |     -|  0.00|             -|          -|             -|        -|          -|        no|         -|        -|   156 (~0%)|    447 (~0%)|    -|
+    |  o copy_A_VITIS_LOOP_132_1                                       |     -|  8.00|             -|          -|             3|        1|          -|       yes|         -|        -|           -|            -|    -|
+    | o outer_j_block                                                  |     -|  8.00|             -|          -|             -|        -|          -|        no|         -|        -|           -|            -|    -|
+    |  + mmult_accel_Pipeline_copy_B_block_VITIS_LOOP_153_2            |     -|  0.00|             -|          -|             -|        -|          -|        no|         -|  4 (~0%)|   397 (~0%)|    654 (~0%)|    -|
+    |   o copy_B_block_VITIS_LOOP_153_2                                |     -|  8.00|             -|          -|            11|        1|          -|       yes|         -|        -|           -|            -|    -|
+    |  o tile_i                                                        |     -|  8.00|             -|          -|             -|        -|          -|        no|         -|        -|           -|            -|    -|
+    |   o tile_j                                                       |     -|  8.00|             -|          -|  115964117068|        -|          -|        no|         -|        -|           -|            -|    -|
+    |    + mmult_accel_Pipeline_writeC_VITIS_LOOP_189_4                |     -|  0.00|            73|    730.000|             -|       73|          -|        no|         -|  4 (~0%)|   319 (~0%)|    994 (~0%)|    -|
+    |     o writeC_VITIS_LOOP_189_4                                    |     -|  8.00|            71|    710.000|             9|        1|         64|       yes|         -|        -|           -|            -|    -|
+    |    o k_loop                                                      |     -|  8.00|  115964116992|  1.160e+12|           216|        -|  536870912|        no|         -|        -|           -|            -|    -|
+    |     + tile_k_compute*                                            |     -|  2.27|           213|  2.130e+03|             -|      213|          -|  dataflow|         -|  8 (~0%)|  13701 (5%)|   10444 (8%)|    -|
+    |      + load_A_tile_k                                             |     -|  2.27|            66|    660.000|             -|       66|          -|        no|         -|        -|    19 (~0%)|    387 (~0%)|    -|
+    |       o VITIS_LOOP_21_1_VITIS_LOOP_22_2                          |     -|  8.00|            64|    640.000|             2|        1|         64|       yes|         -|        -|           -|            -|    -|
+    |      + load_B_tile_k                                             |     -|  3.28|            66|    660.000|             -|       66|          -|        no|         -|        -|    19 (~0%)|    348 (~0%)|    -|
+    |       o VITIS_LOOP_37_1_VITIS_LOOP_38_2                          |     -|  8.00|            64|    640.000|             2|        1|         64|       yes|         -|        -|           -|            -|    -|
+    |      + entry_proc                                                |     -|  6.16|             0|      0.000|             -|        0|          -|        no|         -|        -|     3 (~0%)|    596 (~0%)|    -|
+    |      + compute_tile_k                                            |     -|  5.16|           212|  2.120e+03|             -|      212|          -|        no|         -|  8 (~0%)|   7123 (3%)|    4546 (3%)|    -|
+    |       + compute_tile_k_Pipeline_VITIS_LOOP_60_1_VITIS_LOOP_61_2  |     -|  5.16|            66|    660.000|             -|       66|          -|        no|         -|        -|    18 (~0%)|    140 (~0%)|    -|
+    |        o VITIS_LOOP_60_1_VITIS_LOOP_61_2                         |     -|  8.00|            64|    640.000|             2|        1|         64|       yes|         -|        -|           -|            -|    -|
+    |       + compute_tile_k_Pipeline_VITIS_LOOP_67_3_VITIS_LOOP_68_4  |     -|  5.16|            66|    660.000|             -|       66|          -|        no|         -|        -|    18 (~0%)|    140 (~0%)|    -|
+    |        o VITIS_LOOP_67_3_VITIS_LOOP_68_4                         |     -|  8.00|            64|    640.000|             2|        1|         64|       yes|         -|        -|           -|            -|    -|
+    |       + compute_tile_k_Pipeline_VITIS_LOOP_75_5_VITIS_LOOP_76_6  |     -|  5.16|            69|    690.000|             -|       69|          -|        no|         -|  8 (~0%)|  2271 (~0%)|    2094 (1%)|    -|
+    |        o VITIS_LOOP_75_5_VITIS_LOOP_76_6                         |     -|  8.00|            67|    670.000|             5|        1|         64|       yes|         -|        -|           -|            -|    -|
+    +------------------------------------------------------------------+------+------+--------------+-----------+--------------+---------+-----------+----------+----------+---------+------------+-------------+-----+
 
 
 ================================================================
@@ -129,23 +136,23 @@
  Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
 
 * Inferred Burst Summary
-+--------------+-----------+----------+-------+-----------------+--------------------------+
-| HW Interface | Direction | Length   | Width | Loop            | Loop Location            |
-+--------------+-----------+----------+-------+-----------------+--------------------------+
-| m_axi_gmemA  | read      | variable | 8     | copy_A          | ../mmult_accel.cpp:43:9  |
-| m_axi_gmemB  | read      | variable | 8     | VITIS_LOOP_65_2 | ../mmult_accel.cpp:65:34 |
-+--------------+-----------+----------+-------+-----------------+--------------------------+
++--------------+-----------+----------+-------+------------------+---------------------------+
+| HW Interface | Direction | Length   | Width | Loop             | Loop Location             |
++--------------+-----------+----------+-------+------------------+---------------------------+
+| m_axi_gmemA  | read      | variable | 8     | copy_A           | ../mmult_accel.cpp:131:9  |
+| m_axi_gmemB  | read      | variable | 8     | VITIS_LOOP_153_2 | ../mmult_accel.cpp:153:35 |
++--------------+-----------+----------+-------+------------------+---------------------------+
 
 * All M_AXI Variable Accesses
 +--------------+----------+---------------------------+-----------+--------------+----------+------------------+---------------------------+------------+------------------------------------------------------------------------------------------------------+
 | HW Interface | Variable | Access Location           | Direction | Burst Status | Length   | Loop             | Loop Location             | Resolution | Problem                                                                                              |
 +--------------+----------+---------------------------+-----------+--------------+----------+------------------+---------------------------+------------+------------------------------------------------------------------------------------------------------+
-| m_axi_gmemA  | A        | ../mmult_accel.cpp:46:17  | read      | Widen Fail   |          | VITIS_LOOP_44_1  | ../mmult_accel.cpp:44:30  | 214-353    | Could not widen since type i8 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
-| m_axi_gmemA  | A        | ../mmult_accel.cpp:46:17  | read      | Inferred     | variable | copy_A           | ../mmult_accel.cpp:43:9   |            |                                                                                                      |
-| m_axi_gmemB  | B        | ../mmult_accel.cpp:67:18  | read      | Widen Fail   |          | VITIS_LOOP_65_2  | ../mmult_accel.cpp:65:34  | 214-353    | Could not widen since type i8 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
-| m_axi_gmemB  | B        | ../mmult_accel.cpp:67:18  | read      | Fail         |          | copy_B_block     | ../mmult_accel.cpp:64:13  | 214-230    | Stride is incompatible                                                                               |
-| m_axi_gmemB  | B        | ../mmult_accel.cpp:67:18  | read      | Inferred     | variable | VITIS_LOOP_65_2  | ../mmult_accel.cpp:65:34  |            |                                                                                                      |
-| m_axi_gmemC  | C        | ../mmult_accel.cpp:155:72 | write     | Fail         |          | VITIS_LOOP_150_8 | ../mmult_accel.cpp:150:43 | 214-232    | Access store is in the conditional branch                                                            |
+| m_axi_gmemA  | A        | ../mmult_accel.cpp:134:17 | read      | Widen Fail   |          | VITIS_LOOP_132_1 | ../mmult_accel.cpp:132:31 | 214-353    | Could not widen since type i8 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_gmemA  | A        | ../mmult_accel.cpp:134:17 | read      | Inferred     | variable | copy_A           | ../mmult_accel.cpp:131:9  |            |                                                                                                      |
+| m_axi_gmemB  | B        | ../mmult_accel.cpp:155:18 | read      | Widen Fail   |          | VITIS_LOOP_153_2 | ../mmult_accel.cpp:153:35 | 214-353    | Could not widen since type i8 size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_gmemB  | B        | ../mmult_accel.cpp:155:18 | read      | Fail         |          | copy_B_block     | ../mmult_accel.cpp:152:13 | 214-230    | Stride is incompatible                                                                               |
+| m_axi_gmemB  | B        | ../mmult_accel.cpp:155:18 | read      | Inferred     | variable | VITIS_LOOP_153_2 | ../mmult_accel.cpp:153:35 |            |                                                                                                      |
+| m_axi_gmemC  | C        | ../mmult_accel.cpp:194:72 | write     | Fail         |          | VITIS_LOOP_189_4 | ../mmult_accel.cpp:189:43 | 214-232    | Access store is in the conditional branch                                                            |
 +--------------+----------+---------------------------+-----------+--------------+----------+------------------+---------------------------+------------+------------------------------------------------------------------------------------------------------+
 
     * Resolution URL: docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.2%20English&url=ug1448-hls-guidance&resourceid=XXX-YYY.html (replace XXX-YYY with column value)
@@ -153,972 +160,325 @@
 ================================================================
 == Bind Op Report
 ================================================================
-+------------------------------------------------------+-----+--------+-----------------+-----------+--------------------------+---------+
-| Name                                                 | DSP | Pragma | Variable        | Op        | Impl                     | Latency |
-+------------------------------------------------------+-----+--------+-----------------+-----------+--------------------------+---------+
-| + mmult_accel                                        | 272 |        |                 |           |                          |         |
-|   icmp_ln43_fu_5866_p2                               |     |        | icmp_ln43       | setgt     | auto                     | 0       |
-|   cmp239_fu_5872_p2                                  |     |        | cmp239          | setgt     | auto                     | 0       |
-|   mul_32ns_32ns_63_1_1_U1144                         | 4   |        | mul_ln43        | mul       | auto                     | 0       |
-|   select_ln43_fu_5907_p3                             |     |        | select_ln43     | select    | auto_sel                 | 0       |
-|   empty_288_fu_5914_p3                               |     |        | empty_288       | select    | auto_sel                 | 0       |
-|   smax_fu_5878_p3                                    |     |        | smax            | select    | auto_sel                 | 0       |
-|   smax1_fu_5886_p3                                   |     |        | smax1           | select    | auto_sel                 | 0       |
-|   mul_31ns_31ns_62_1_1_U1143                         | 4   |        | mul_ln18        | mul       | auto                     | 0       |
-|   icmp_ln55_fu_5955_p2                               |     |        | icmp_ln55       | setlt     | auto                     | 0       |
-|   add_ln57_fu_5964_p2                                |     |        | add_ln57        | add       | fabric                   | 0       |
-|   icmp_ln57_fu_5974_p2                               |     |        | icmp_ln57       | setlt     | auto                     | 0       |
-|   xor_ln57_fu_5979_p2                                |     |        | xor_ln57        | xor       | auto                     | 0       |
-|   sub_ln57_fu_5989_p2                                |     |        | sub_ln57        | sub       | fabric                   | 0       |
-|   current_block_M_fu_5994_p3                         |     |        | current_block_M | select    | auto_sel                 | 0       |
-|   cmp2414_fu_6006_p2                                 |     |        | cmp2414         | setgt     | auto                     | 0       |
-|   empty_290_fu_6012_p3                               |     |        | empty_290       | select    | auto_sel                 | 0       |
-|   mul_31ns_31ns_62_1_1_U1143                         | 4   |        | mul_ln55        | mul       | auto                     | 0       |
-|   icmp_ln76_fu_6032_p2                               |     |        | icmp_ln76       | setlt     | auto                     | 0       |
-|   icmp_ln78_fu_6049_p2                               |     |        | icmp_ln78       | setlt     | auto                     | 0       |
-|   icmp_ln102_fu_6068_p2                              |     |        | icmp_ln102      | setlt     | auto                     | 0       |
-|   add_ln102_fu_6079_p2                               |     |        | add_ln102       | add       | fabric                   | 0       |
-|   add_ln78_fu_6085_p2                                |     |        | add_ln78        | add       | fabric                   | 0       |
-|   add_ln76_fu_6058_p2                                |     |        | add_ln76        | add       | fabric                   | 0       |
-|  + mmult_accel_Pipeline_copy_A_VITIS_LOOP_44_1       | 0   |        |                 |           |                          |         |
-|    icmp_ln44_fu_174_p2                               |     |        | icmp_ln44       | setlt     | auto                     | 0       |
-|    icmp_ln43_fu_146_p2                               |     |        | icmp_ln43       | seteq     | auto                     | 0       |
-|    add_ln43_1_fu_151_p2                              |     |        | add_ln43_1      | add       | fabric                   | 0       |
-|    add_ln43_fu_182_p2                                |     |        | add_ln43        | add       | fabric                   | 0       |
-|    select_ln43_fu_188_p3                             |     |        | select_ln43     | select    | auto_sel                 | 0       |
-|    select_ln43_1_fu_196_p3                           |     |        | select_ln43_1   | select    | auto_sel                 | 0       |
-|    sub_ln46_fu_228_p2                                |     |        | sub_ln46        | sub       | fabric                   | 0       |
-|    add_ln46_fu_238_p2                                |     |        | add_ln46        | add       | fabric                   | 0       |
-|    add_ln44_fu_244_p2                                |     |        | add_ln44        | add       | fabric                   | 0       |
-|  + mmult_accel_Pipeline_copy_B_block_VITIS_LOOP_65_2 | 4   |        |                 |           |                          |         |
-|    icmp_ln65_fu_199_p2                               |     |        | icmp_ln65       | setlt     | auto                     | 0       |
-|    icmp_ln64_fu_204_p2                               |     |        | icmp_ln64       | seteq     | auto                     | 0       |
-|    add_ln64_1_fu_209_p2                              |     |        | add_ln64_1      | add       | fabric                   | 0       |
-|    add_ln64_fu_218_p2                                |     |        | add_ln64        | add       | fabric                   | 0       |
-|    select_ln64_fu_224_p3                             |     |        | select_ln64     | select    | auto_sel                 | 0       |
-|    select_ln64_1_fu_232_p3                           |     |        | select_ln64_1   | select    | auto_sel                 | 0       |
-|    first_iter_1_fu_244_p2                            |     |        | first_iter_1    | seteq     | auto                     | 0       |
-|    mul_31ns_32ns_63_1_1_U6                           | 4   |        | empty_31        | mul       | auto                     | 0       |
-|    add_ln67_fu_283_p2                                |     |        | add_ln67        | add       | fabric                   | 0       |
-|    add_ln65_fu_289_p2                                |     |        | add_ln65        | add       | fabric                   | 0       |
-|  + mmult_accel_Pipeline_loadA_VITIS_LOOP_106_4       | 0   |        |                 |           |                          |         |
-|    icmp_ln105_fu_405_p2                              |     |        | icmp_ln105      | seteq     | auto                     | 0       |
-|    add_ln105_1_fu_411_p2                             |     |        | add_ln105_1     | add       | fabric                   | 0       |
-|    add_ln105_fu_423_p2                               |     |        | add_ln105       | add       | fabric                   | 0       |
-|    icmp_ln106_fu_429_p2                              |     |        | icmp_ln106      | seteq     | auto                     | 0       |
-|    select_ln105_fu_435_p3                            |     |        | select_ln105    | select    | auto_sel                 | 0       |
-|    select_ln105_1_fu_443_p3                          |     |        | select_ln105_1  | select    | auto_sel                 | 0       |
-|    empty_fu_459_p2                                   |     |        | empty           | add       | fabric                   | 0       |
-|    sub_ln111_fu_489_p2                               |     |        | sub_ln111       | sub       | fabric                   | 0       |
-|    cmp83_fu_499_p2                                   |     |        | cmp83           | setlt     | auto                     | 0       |
-|    add_ln109_fu_509_p2                               |     |        | add_ln109       | add       | fabric                   | 0       |
-|    add_ln111_fu_519_p2                               |     |        | add_ln111       | add       | fabric                   | 0       |
-|    icmp_ln110_fu_530_p2                              |     |        | icmp_ln110      | setlt     | auto                     | 0       |
-|    and_ln110_fu_536_p2                               |     |        | and_ln110       | and       | auto                     | 0       |
-|    storemerge_fu_582_p3                              |     |        | storemerge      | select    | auto_sel                 | 0       |
-|    add_ln106_fu_542_p2                               |     |        | add_ln106       | add       | fabric                   | 0       |
-|  + mmult_accel_Pipeline_loadB_VITIS_LOOP_120_5       | 0   |        |                 |           |                          |         |
-|    icmp_ln119_fu_401_p2                              |     |        | icmp_ln119      | seteq     | auto                     | 0       |
-|    add_ln119_1_fu_407_p2                             |     |        | add_ln119_1     | add       | fabric                   | 0       |
-|    add_ln119_fu_419_p2                               |     |        | add_ln119       | add       | fabric                   | 0       |
-|    icmp_ln120_fu_425_p2                              |     |        | icmp_ln120      | seteq     | auto                     | 0       |
-|    select_ln119_fu_431_p3                            |     |        | select_ln119    | select    | auto_sel                 | 0       |
-|    select_ln119_1_fu_439_p3                          |     |        | select_ln119_1  | select    | auto_sel                 | 0       |
-|    empty_fu_451_p2                                   |     |        | empty           | add       | fabric                   | 0       |
-|    cmp116_fu_469_p2                                  |     |        | cmp116          | setlt     | auto                     | 0       |
-|    add_ln123_fu_483_p2                               |     |        | add_ln123       | add       | fabric                   | 0       |
-|    add_ln125_fu_493_p2                               |     |        | add_ln125       | add       | fabric                   | 0       |
-|    icmp_ln124_fu_504_p2                              |     |        | icmp_ln124      | setlt     | auto                     | 0       |
-|    and_ln124_fu_510_p2                               |     |        | and_ln124       | and       | auto                     | 0       |
-|    storemerge732_fu_556_p3                           |     |        | storemerge732   | select    | auto_sel                 | 0       |
-|    add_ln120_fu_516_p2                               |     |        | add_ln120       | add       | fabric                   | 0       |
-|  + mmult_accel_Pipeline_writeC_VITIS_LOOP_150_8      | 4   |        |                 |           |                          |         |
-|    icmp_ln149_fu_2277_p2                             |     |        | icmp_ln149      | seteq     | auto                     | 0       |
-|    add_ln149_1_fu_2283_p2                            |     |        | add_ln149_1     | add       | fabric                   | 0       |
-|    add_ln149_fu_2295_p2                              |     |        | add_ln149       | add       | fabric                   | 0       |
-|    icmp_ln150_fu_2301_p2                             |     |        | icmp_ln150      | seteq     | auto                     | 0       |
-|    select_ln149_fu_2307_p3                           |     |        | select_ln149    | select    | auto_sel                 | 0       |
-|    select_ln149_1_fu_2315_p3                         |     |        | select_ln149_1  | select    | auto_sel                 | 0       |
-|    empty_fu_2331_p2                                  |     |        | empty           | add       | fabric                   | 0       |
-|    cmp196_fu_2342_p2                                 |     |        | cmp196          | setlt     | auto                     | 0       |
-|    mul_32ns_32s_62_1_1_U859                          | 4   |        | empty_27        | mul       | auto                     | 0       |
-|    add_ln153_fu_2356_p2                              |     |        | add_ln153       | add       | fabric                   | 0       |
-|    icmp_ln154_fu_2362_p2                             |     |        | icmp_ln154      | setlt     | auto                     | 0       |
-|    and_ln154_fu_2368_p2                              |     |        | and_ln154       | and       | auto                     | 0       |
-|    sparsemux_33_4_32_1_1_U860                        |     |        | tmp             | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U861                        |     |        | tmp_1           | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U862                        |     |        | tmp_2           | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U863                        |     |        | tmp_3           | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U864                        |     |        | tmp_4           | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U865                        |     |        | tmp_5           | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U866                        |     |        | tmp_6           | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U867                        |     |        | tmp_7           | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U868                        |     |        | tmp_8           | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U869                        |     |        | tmp_9           | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U870                        |     |        | tmp_s           | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U871                        |     |        | tmp_10          | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U872                        |     |        | tmp_11          | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U873                        |     |        | tmp_12          | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U874                        |     |        | tmp_13          | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U875                        |     |        | tmp_14          | sparsemux | compactencoding_dontcare | 0       |
-|    sparsemux_33_4_32_1_1_U876                        |     |        | tmp_15          | sparsemux | compactencoding_dontcare | 0       |
-|    add_ln155_2_fu_3622_p2                            |     |        | add_ln155_2     | add       | fabric                   | 0       |
-|    add_ln150_fu_3648_p2                              |     |        | add_ln150       | add       | fabric                   | 0       |
-|  + mmult_accel_Pipeline_compute                      | 256 |        |                 |           |                          |         |
-|    icmp_ln133_fu_7176_p2                             |     |        | icmp_ln133      | seteq     | auto                     | 0       |
-|    add_ln133_fu_7182_p2                              |     |        | add_ln133       | add       | fabric                   | 0       |
-|    mac_muladd_8s_8s_32s_32_4_1_U58                   | 1   |        | mul_ln141       | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U58                   | 1   |        | sext_ln141      | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U58                   | 1   |        | add_ln141       | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U59                   | 1   |        | mul_ln141_1     | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U59                   | 1   |        | sext_ln141_1    | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U59                   | 1   |        | add_ln141_1     | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U60                   | 1   |        | mul_ln141_2     | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U60                   | 1   |        | sext_ln141_2    | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U60                   | 1   |        | add_ln141_2     | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U61                   | 1   |        | mul_ln141_3     | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U61                   | 1   |        | sext_ln141_3    | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U61                   | 1   |        | add_ln141_3     | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U62                   | 1   |        | mul_ln141_4     | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U62                   | 1   |        | sext_ln141_4    | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U62                   | 1   |        | add_ln141_4     | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U63                   | 1   |        | mul_ln141_5     | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U63                   | 1   |        | sext_ln141_5    | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U63                   | 1   |        | add_ln141_5     | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U64                   | 1   |        | mul_ln141_6     | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U64                   | 1   |        | sext_ln141_6    | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U64                   | 1   |        | add_ln141_6     | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U65                   | 1   |        | mul_ln141_7     | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U65                   | 1   |        | sext_ln141_7    | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U65                   | 1   |        | add_ln141_7     | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U66                   | 1   |        | mul_ln141_8     | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U66                   | 1   |        | sext_ln141_8    | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U66                   | 1   |        | add_ln141_8     | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U67                   | 1   |        | mul_ln141_9     | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U67                   | 1   |        | sext_ln141_9    | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U67                   | 1   |        | add_ln141_9     | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U68                   | 1   |        | mul_ln141_10    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U68                   | 1   |        | sext_ln141_10   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U68                   | 1   |        | add_ln141_10    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U69                   | 1   |        | mul_ln141_11    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U69                   | 1   |        | sext_ln141_11   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U69                   | 1   |        | add_ln141_11    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U70                   | 1   |        | mul_ln141_12    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U70                   | 1   |        | sext_ln141_12   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U70                   | 1   |        | add_ln141_12    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U71                   | 1   |        | mul_ln141_13    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U71                   | 1   |        | sext_ln141_13   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U71                   | 1   |        | add_ln141_13    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U72                   | 1   |        | mul_ln141_14    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U72                   | 1   |        | sext_ln141_14   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U72                   | 1   |        | add_ln141_14    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U73                   | 1   |        | mul_ln141_15    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U73                   | 1   |        | sext_ln141_15   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U73                   | 1   |        | add_ln141_15    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U74                   | 1   |        | mul_ln141_16    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U74                   | 1   |        | sext_ln141_16   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U74                   | 1   |        | add_ln141_16    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U75                   | 1   |        | mul_ln141_17    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U75                   | 1   |        | sext_ln141_17   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U75                   | 1   |        | add_ln141_17    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U76                   | 1   |        | mul_ln141_18    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U76                   | 1   |        | sext_ln141_18   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U76                   | 1   |        | add_ln141_18    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U77                   | 1   |        | mul_ln141_19    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U77                   | 1   |        | sext_ln141_19   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U77                   | 1   |        | add_ln141_19    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U78                   | 1   |        | mul_ln141_20    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U78                   | 1   |        | sext_ln141_20   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U78                   | 1   |        | add_ln141_20    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U79                   | 1   |        | mul_ln141_21    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U79                   | 1   |        | sext_ln141_21   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U79                   | 1   |        | add_ln141_21    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U80                   | 1   |        | mul_ln141_22    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U80                   | 1   |        | sext_ln141_22   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U80                   | 1   |        | add_ln141_22    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U81                   | 1   |        | mul_ln141_23    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U81                   | 1   |        | sext_ln141_23   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U81                   | 1   |        | add_ln141_23    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U82                   | 1   |        | mul_ln141_24    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U82                   | 1   |        | sext_ln141_24   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U82                   | 1   |        | add_ln141_24    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U83                   | 1   |        | mul_ln141_25    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U83                   | 1   |        | sext_ln141_25   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U83                   | 1   |        | add_ln141_25    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U84                   | 1   |        | mul_ln141_26    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U84                   | 1   |        | sext_ln141_26   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U84                   | 1   |        | add_ln141_26    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U85                   | 1   |        | mul_ln141_27    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U85                   | 1   |        | sext_ln141_27   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U85                   | 1   |        | add_ln141_27    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U86                   | 1   |        | mul_ln141_28    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U86                   | 1   |        | sext_ln141_28   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U86                   | 1   |        | add_ln141_28    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U87                   | 1   |        | mul_ln141_29    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U87                   | 1   |        | sext_ln141_29   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U87                   | 1   |        | add_ln141_29    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U88                   | 1   |        | mul_ln141_30    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U88                   | 1   |        | sext_ln141_30   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U88                   | 1   |        | add_ln141_30    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U89                   | 1   |        | mul_ln141_31    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U89                   | 1   |        | sext_ln141_31   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U89                   | 1   |        | add_ln141_31    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U90                   | 1   |        | mul_ln141_32    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U90                   | 1   |        | sext_ln141_32   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U90                   | 1   |        | add_ln141_32    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U91                   | 1   |        | mul_ln141_33    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U91                   | 1   |        | sext_ln141_33   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U91                   | 1   |        | add_ln141_33    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U92                   | 1   |        | mul_ln141_34    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U92                   | 1   |        | sext_ln141_34   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U92                   | 1   |        | add_ln141_34    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U93                   | 1   |        | mul_ln141_35    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U93                   | 1   |        | sext_ln141_35   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U93                   | 1   |        | add_ln141_35    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U94                   | 1   |        | mul_ln141_36    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U94                   | 1   |        | sext_ln141_36   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U94                   | 1   |        | add_ln141_36    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U95                   | 1   |        | mul_ln141_37    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U95                   | 1   |        | sext_ln141_37   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U95                   | 1   |        | add_ln141_37    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U96                   | 1   |        | mul_ln141_38    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U96                   | 1   |        | sext_ln141_38   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U96                   | 1   |        | add_ln141_38    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U97                   | 1   |        | mul_ln141_39    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U97                   | 1   |        | sext_ln141_39   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U97                   | 1   |        | add_ln141_39    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U98                   | 1   |        | mul_ln141_40    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U98                   | 1   |        | sext_ln141_40   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U98                   | 1   |        | add_ln141_40    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U99                   | 1   |        | mul_ln141_41    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U99                   | 1   |        | sext_ln141_41   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U99                   | 1   |        | add_ln141_41    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U100                  | 1   |        | mul_ln141_42    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U100                  | 1   |        | sext_ln141_42   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U100                  | 1   |        | add_ln141_42    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U101                  | 1   |        | mul_ln141_43    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U101                  | 1   |        | sext_ln141_43   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U101                  | 1   |        | add_ln141_43    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U102                  | 1   |        | mul_ln141_44    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U102                  | 1   |        | sext_ln141_44   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U102                  | 1   |        | add_ln141_44    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U103                  | 1   |        | mul_ln141_45    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U103                  | 1   |        | sext_ln141_45   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U103                  | 1   |        | add_ln141_45    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U104                  | 1   |        | mul_ln141_46    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U104                  | 1   |        | sext_ln141_46   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U104                  | 1   |        | add_ln141_46    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U105                  | 1   |        | mul_ln141_47    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U105                  | 1   |        | sext_ln141_47   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U105                  | 1   |        | add_ln141_47    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U106                  | 1   |        | mul_ln141_48    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U106                  | 1   |        | sext_ln141_48   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U106                  | 1   |        | add_ln141_48    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U107                  | 1   |        | mul_ln141_49    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U107                  | 1   |        | sext_ln141_49   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U107                  | 1   |        | add_ln141_49    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U108                  | 1   |        | mul_ln141_50    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U108                  | 1   |        | sext_ln141_50   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U108                  | 1   |        | add_ln141_50    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U109                  | 1   |        | mul_ln141_51    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U109                  | 1   |        | sext_ln141_51   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U109                  | 1   |        | add_ln141_51    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U110                  | 1   |        | mul_ln141_52    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U110                  | 1   |        | sext_ln141_52   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U110                  | 1   |        | add_ln141_52    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U111                  | 1   |        | mul_ln141_53    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U111                  | 1   |        | sext_ln141_53   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U111                  | 1   |        | add_ln141_53    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U112                  | 1   |        | mul_ln141_54    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U112                  | 1   |        | sext_ln141_54   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U112                  | 1   |        | add_ln141_54    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U113                  | 1   |        | mul_ln141_55    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U113                  | 1   |        | sext_ln141_55   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U113                  | 1   |        | add_ln141_55    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U114                  | 1   |        | mul_ln141_56    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U114                  | 1   |        | sext_ln141_56   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U114                  | 1   |        | add_ln141_56    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U115                  | 1   |        | mul_ln141_57    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U115                  | 1   |        | sext_ln141_57   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U115                  | 1   |        | add_ln141_57    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U116                  | 1   |        | mul_ln141_58    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U116                  | 1   |        | sext_ln141_58   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U116                  | 1   |        | add_ln141_58    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U117                  | 1   |        | mul_ln141_59    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U117                  | 1   |        | sext_ln141_59   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U117                  | 1   |        | add_ln141_59    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U118                  | 1   |        | mul_ln141_60    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U118                  | 1   |        | sext_ln141_60   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U118                  | 1   |        | add_ln141_60    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U119                  | 1   |        | mul_ln141_61    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U119                  | 1   |        | sext_ln141_61   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U119                  | 1   |        | add_ln141_61    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U120                  | 1   |        | mul_ln141_62    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U120                  | 1   |        | sext_ln141_62   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U120                  | 1   |        | add_ln141_62    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U121                  | 1   |        | mul_ln141_63    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U121                  | 1   |        | sext_ln141_63   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U121                  | 1   |        | add_ln141_63    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U122                  | 1   |        | mul_ln141_64    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U122                  | 1   |        | sext_ln141_64   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U122                  | 1   |        | add_ln141_64    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U123                  | 1   |        | mul_ln141_65    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U123                  | 1   |        | sext_ln141_65   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U123                  | 1   |        | add_ln141_65    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U124                  | 1   |        | mul_ln141_66    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U124                  | 1   |        | sext_ln141_66   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U124                  | 1   |        | add_ln141_66    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U125                  | 1   |        | mul_ln141_67    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U125                  | 1   |        | sext_ln141_67   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U125                  | 1   |        | add_ln141_67    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U126                  | 1   |        | mul_ln141_68    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U126                  | 1   |        | sext_ln141_68   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U126                  | 1   |        | add_ln141_68    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U127                  | 1   |        | mul_ln141_69    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U127                  | 1   |        | sext_ln141_69   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U127                  | 1   |        | add_ln141_69    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U128                  | 1   |        | mul_ln141_70    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U128                  | 1   |        | sext_ln141_70   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U128                  | 1   |        | add_ln141_70    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U129                  | 1   |        | mul_ln141_71    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U129                  | 1   |        | sext_ln141_71   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U129                  | 1   |        | add_ln141_71    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U130                  | 1   |        | mul_ln141_72    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U130                  | 1   |        | sext_ln141_72   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U130                  | 1   |        | add_ln141_72    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U131                  | 1   |        | mul_ln141_73    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U131                  | 1   |        | sext_ln141_73   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U131                  | 1   |        | add_ln141_73    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U132                  | 1   |        | mul_ln141_74    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U132                  | 1   |        | sext_ln141_74   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U132                  | 1   |        | add_ln141_74    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U133                  | 1   |        | mul_ln141_75    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U133                  | 1   |        | sext_ln141_75   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U133                  | 1   |        | add_ln141_75    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U134                  | 1   |        | mul_ln141_76    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U134                  | 1   |        | sext_ln141_76   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U134                  | 1   |        | add_ln141_76    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U135                  | 1   |        | mul_ln141_77    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U135                  | 1   |        | sext_ln141_77   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U135                  | 1   |        | add_ln141_77    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U136                  | 1   |        | mul_ln141_78    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U136                  | 1   |        | sext_ln141_78   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U136                  | 1   |        | add_ln141_78    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U137                  | 1   |        | mul_ln141_79    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U137                  | 1   |        | sext_ln141_79   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U137                  | 1   |        | add_ln141_79    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U138                  | 1   |        | mul_ln141_80    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U138                  | 1   |        | sext_ln141_80   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U138                  | 1   |        | add_ln141_80    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U139                  | 1   |        | mul_ln141_81    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U139                  | 1   |        | sext_ln141_81   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U139                  | 1   |        | add_ln141_81    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U140                  | 1   |        | mul_ln141_82    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U140                  | 1   |        | sext_ln141_82   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U140                  | 1   |        | add_ln141_82    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U141                  | 1   |        | mul_ln141_83    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U141                  | 1   |        | sext_ln141_83   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U141                  | 1   |        | add_ln141_83    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U142                  | 1   |        | mul_ln141_84    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U142                  | 1   |        | sext_ln141_84   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U142                  | 1   |        | add_ln141_84    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U143                  | 1   |        | mul_ln141_85    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U143                  | 1   |        | sext_ln141_85   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U143                  | 1   |        | add_ln141_85    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U144                  | 1   |        | mul_ln141_86    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U144                  | 1   |        | sext_ln141_86   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U144                  | 1   |        | add_ln141_86    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U145                  | 1   |        | mul_ln141_87    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U145                  | 1   |        | sext_ln141_87   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U145                  | 1   |        | add_ln141_87    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U146                  | 1   |        | mul_ln141_88    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U146                  | 1   |        | sext_ln141_88   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U146                  | 1   |        | add_ln141_88    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U147                  | 1   |        | mul_ln141_89    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U147                  | 1   |        | sext_ln141_89   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U147                  | 1   |        | add_ln141_89    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U148                  | 1   |        | mul_ln141_90    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U148                  | 1   |        | sext_ln141_90   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U148                  | 1   |        | add_ln141_90    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U149                  | 1   |        | mul_ln141_91    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U149                  | 1   |        | sext_ln141_91   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U149                  | 1   |        | add_ln141_91    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U150                  | 1   |        | mul_ln141_92    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U150                  | 1   |        | sext_ln141_92   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U150                  | 1   |        | add_ln141_92    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U151                  | 1   |        | mul_ln141_93    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U151                  | 1   |        | sext_ln141_93   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U151                  | 1   |        | add_ln141_93    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U152                  | 1   |        | mul_ln141_94    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U152                  | 1   |        | sext_ln141_94   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U152                  | 1   |        | add_ln141_94    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U153                  | 1   |        | mul_ln141_95    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U153                  | 1   |        | sext_ln141_95   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U153                  | 1   |        | add_ln141_95    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U154                  | 1   |        | mul_ln141_96    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U154                  | 1   |        | sext_ln141_96   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U154                  | 1   |        | add_ln141_96    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U155                  | 1   |        | mul_ln141_97    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U155                  | 1   |        | sext_ln141_97   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U155                  | 1   |        | add_ln141_97    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U156                  | 1   |        | mul_ln141_98    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U156                  | 1   |        | sext_ln141_98   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U156                  | 1   |        | add_ln141_98    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U157                  | 1   |        | mul_ln141_99    | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U157                  | 1   |        | sext_ln141_99   | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U157                  | 1   |        | add_ln141_99    | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U158                  | 1   |        | mul_ln141_100   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U158                  | 1   |        | sext_ln141_100  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U158                  | 1   |        | add_ln141_100   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U159                  | 1   |        | mul_ln141_101   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U159                  | 1   |        | sext_ln141_101  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U159                  | 1   |        | add_ln141_101   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U160                  | 1   |        | mul_ln141_102   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U160                  | 1   |        | sext_ln141_102  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U160                  | 1   |        | add_ln141_102   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U161                  | 1   |        | mul_ln141_103   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U161                  | 1   |        | sext_ln141_103  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U161                  | 1   |        | add_ln141_103   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U162                  | 1   |        | mul_ln141_104   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U162                  | 1   |        | sext_ln141_104  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U162                  | 1   |        | add_ln141_104   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U163                  | 1   |        | mul_ln141_105   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U163                  | 1   |        | sext_ln141_105  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U163                  | 1   |        | add_ln141_105   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U164                  | 1   |        | mul_ln141_106   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U164                  | 1   |        | sext_ln141_106  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U164                  | 1   |        | add_ln141_106   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U165                  | 1   |        | mul_ln141_107   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U165                  | 1   |        | sext_ln141_107  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U165                  | 1   |        | add_ln141_107   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U166                  | 1   |        | mul_ln141_108   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U166                  | 1   |        | sext_ln141_108  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U166                  | 1   |        | add_ln141_108   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U167                  | 1   |        | mul_ln141_109   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U167                  | 1   |        | sext_ln141_109  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U167                  | 1   |        | add_ln141_109   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U168                  | 1   |        | mul_ln141_110   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U168                  | 1   |        | sext_ln141_110  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U168                  | 1   |        | add_ln141_110   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U169                  | 1   |        | mul_ln141_111   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U169                  | 1   |        | sext_ln141_111  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U169                  | 1   |        | add_ln141_111   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U170                  | 1   |        | mul_ln141_112   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U170                  | 1   |        | sext_ln141_112  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U170                  | 1   |        | add_ln141_112   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U171                  | 1   |        | mul_ln141_113   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U171                  | 1   |        | sext_ln141_113  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U171                  | 1   |        | add_ln141_113   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U172                  | 1   |        | mul_ln141_114   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U172                  | 1   |        | sext_ln141_114  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U172                  | 1   |        | add_ln141_114   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U173                  | 1   |        | mul_ln141_115   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U173                  | 1   |        | sext_ln141_115  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U173                  | 1   |        | add_ln141_115   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U174                  | 1   |        | mul_ln141_116   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U174                  | 1   |        | sext_ln141_116  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U174                  | 1   |        | add_ln141_116   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U175                  | 1   |        | mul_ln141_117   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U175                  | 1   |        | sext_ln141_117  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U175                  | 1   |        | add_ln141_117   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U176                  | 1   |        | mul_ln141_118   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U176                  | 1   |        | sext_ln141_118  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U176                  | 1   |        | add_ln141_118   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U177                  | 1   |        | mul_ln141_119   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U177                  | 1   |        | sext_ln141_119  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U177                  | 1   |        | add_ln141_119   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U178                  | 1   |        | mul_ln141_120   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U178                  | 1   |        | sext_ln141_120  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U178                  | 1   |        | add_ln141_120   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U179                  | 1   |        | mul_ln141_121   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U179                  | 1   |        | sext_ln141_121  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U179                  | 1   |        | add_ln141_121   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U180                  | 1   |        | mul_ln141_122   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U180                  | 1   |        | sext_ln141_122  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U180                  | 1   |        | add_ln141_122   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U181                  | 1   |        | mul_ln141_123   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U181                  | 1   |        | sext_ln141_123  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U181                  | 1   |        | add_ln141_123   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U182                  | 1   |        | mul_ln141_124   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U182                  | 1   |        | sext_ln141_124  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U182                  | 1   |        | add_ln141_124   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U183                  | 1   |        | mul_ln141_125   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U183                  | 1   |        | sext_ln141_125  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U183                  | 1   |        | add_ln141_125   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U184                  | 1   |        | mul_ln141_126   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U184                  | 1   |        | sext_ln141_126  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U184                  | 1   |        | add_ln141_126   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U185                  | 1   |        | mul_ln141_127   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U185                  | 1   |        | sext_ln141_127  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U185                  | 1   |        | add_ln141_127   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U186                  | 1   |        | mul_ln141_128   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U186                  | 1   |        | sext_ln141_128  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U186                  | 1   |        | add_ln141_128   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U187                  | 1   |        | mul_ln141_129   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U187                  | 1   |        | sext_ln141_129  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U187                  | 1   |        | add_ln141_129   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U188                  | 1   |        | mul_ln141_130   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U188                  | 1   |        | sext_ln141_130  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U188                  | 1   |        | add_ln141_130   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U189                  | 1   |        | mul_ln141_131   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U189                  | 1   |        | sext_ln141_131  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U189                  | 1   |        | add_ln141_131   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U190                  | 1   |        | mul_ln141_132   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U190                  | 1   |        | sext_ln141_132  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U190                  | 1   |        | add_ln141_132   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U191                  | 1   |        | mul_ln141_133   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U191                  | 1   |        | sext_ln141_133  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U191                  | 1   |        | add_ln141_133   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U192                  | 1   |        | mul_ln141_134   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U192                  | 1   |        | sext_ln141_134  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U192                  | 1   |        | add_ln141_134   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U193                  | 1   |        | mul_ln141_135   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U193                  | 1   |        | sext_ln141_135  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U193                  | 1   |        | add_ln141_135   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U194                  | 1   |        | mul_ln141_136   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U194                  | 1   |        | sext_ln141_136  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U194                  | 1   |        | add_ln141_136   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U195                  | 1   |        | mul_ln141_137   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U195                  | 1   |        | sext_ln141_137  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U195                  | 1   |        | add_ln141_137   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U196                  | 1   |        | mul_ln141_138   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U196                  | 1   |        | sext_ln141_138  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U196                  | 1   |        | add_ln141_138   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U197                  | 1   |        | mul_ln141_139   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U197                  | 1   |        | sext_ln141_139  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U197                  | 1   |        | add_ln141_139   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U198                  | 1   |        | mul_ln141_140   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U198                  | 1   |        | sext_ln141_140  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U198                  | 1   |        | add_ln141_140   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U199                  | 1   |        | mul_ln141_141   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U199                  | 1   |        | sext_ln141_141  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U199                  | 1   |        | add_ln141_141   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U200                  | 1   |        | mul_ln141_142   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U200                  | 1   |        | sext_ln141_142  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U200                  | 1   |        | add_ln141_142   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U201                  | 1   |        | mul_ln141_143   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U201                  | 1   |        | sext_ln141_143  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U201                  | 1   |        | add_ln141_143   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U202                  | 1   |        | mul_ln141_144   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U202                  | 1   |        | sext_ln141_144  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U202                  | 1   |        | add_ln141_144   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U203                  | 1   |        | mul_ln141_145   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U203                  | 1   |        | sext_ln141_145  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U203                  | 1   |        | add_ln141_145   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U204                  | 1   |        | mul_ln141_146   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U204                  | 1   |        | sext_ln141_146  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U204                  | 1   |        | add_ln141_146   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U205                  | 1   |        | mul_ln141_147   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U205                  | 1   |        | sext_ln141_147  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U205                  | 1   |        | add_ln141_147   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U206                  | 1   |        | mul_ln141_148   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U206                  | 1   |        | sext_ln141_148  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U206                  | 1   |        | add_ln141_148   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U207                  | 1   |        | mul_ln141_149   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U207                  | 1   |        | sext_ln141_149  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U207                  | 1   |        | add_ln141_149   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U208                  | 1   |        | mul_ln141_150   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U208                  | 1   |        | sext_ln141_150  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U208                  | 1   |        | add_ln141_150   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U209                  | 1   |        | mul_ln141_151   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U209                  | 1   |        | sext_ln141_151  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U209                  | 1   |        | add_ln141_151   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U210                  | 1   |        | mul_ln141_152   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U210                  | 1   |        | sext_ln141_152  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U210                  | 1   |        | add_ln141_152   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U211                  | 1   |        | mul_ln141_153   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U211                  | 1   |        | sext_ln141_153  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U211                  | 1   |        | add_ln141_153   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U212                  | 1   |        | mul_ln141_154   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U212                  | 1   |        | sext_ln141_154  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U212                  | 1   |        | add_ln141_154   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U213                  | 1   |        | mul_ln141_155   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U213                  | 1   |        | sext_ln141_155  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U213                  | 1   |        | add_ln141_155   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U214                  | 1   |        | mul_ln141_156   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U214                  | 1   |        | sext_ln141_156  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U214                  | 1   |        | add_ln141_156   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U215                  | 1   |        | mul_ln141_157   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U215                  | 1   |        | sext_ln141_157  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U215                  | 1   |        | add_ln141_157   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U216                  | 1   |        | mul_ln141_158   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U216                  | 1   |        | sext_ln141_158  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U216                  | 1   |        | add_ln141_158   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U217                  | 1   |        | mul_ln141_159   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U217                  | 1   |        | sext_ln141_159  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U217                  | 1   |        | add_ln141_159   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U218                  | 1   |        | mul_ln141_160   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U218                  | 1   |        | sext_ln141_160  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U218                  | 1   |        | add_ln141_160   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U219                  | 1   |        | mul_ln141_161   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U219                  | 1   |        | sext_ln141_161  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U219                  | 1   |        | add_ln141_161   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U220                  | 1   |        | mul_ln141_162   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U220                  | 1   |        | sext_ln141_162  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U220                  | 1   |        | add_ln141_162   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U221                  | 1   |        | mul_ln141_163   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U221                  | 1   |        | sext_ln141_163  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U221                  | 1   |        | add_ln141_163   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U222                  | 1   |        | mul_ln141_164   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U222                  | 1   |        | sext_ln141_164  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U222                  | 1   |        | add_ln141_164   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U223                  | 1   |        | mul_ln141_165   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U223                  | 1   |        | sext_ln141_165  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U223                  | 1   |        | add_ln141_165   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U224                  | 1   |        | mul_ln141_166   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U224                  | 1   |        | sext_ln141_166  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U224                  | 1   |        | add_ln141_166   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U225                  | 1   |        | mul_ln141_167   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U225                  | 1   |        | sext_ln141_167  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U225                  | 1   |        | add_ln141_167   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U226                  | 1   |        | mul_ln141_168   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U226                  | 1   |        | sext_ln141_168  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U226                  | 1   |        | add_ln141_168   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U227                  | 1   |        | mul_ln141_169   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U227                  | 1   |        | sext_ln141_169  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U227                  | 1   |        | add_ln141_169   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U228                  | 1   |        | mul_ln141_170   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U228                  | 1   |        | sext_ln141_170  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U228                  | 1   |        | add_ln141_170   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U229                  | 1   |        | mul_ln141_171   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U229                  | 1   |        | sext_ln141_171  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U229                  | 1   |        | add_ln141_171   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U230                  | 1   |        | mul_ln141_172   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U230                  | 1   |        | sext_ln141_172  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U230                  | 1   |        | add_ln141_172   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U231                  | 1   |        | mul_ln141_173   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U231                  | 1   |        | sext_ln141_173  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U231                  | 1   |        | add_ln141_173   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U232                  | 1   |        | mul_ln141_174   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U232                  | 1   |        | sext_ln141_174  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U232                  | 1   |        | add_ln141_174   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U233                  | 1   |        | mul_ln141_175   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U233                  | 1   |        | sext_ln141_175  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U233                  | 1   |        | add_ln141_175   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U234                  | 1   |        | mul_ln141_176   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U234                  | 1   |        | sext_ln141_176  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U234                  | 1   |        | add_ln141_176   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U235                  | 1   |        | mul_ln141_177   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U235                  | 1   |        | sext_ln141_177  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U235                  | 1   |        | add_ln141_177   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U236                  | 1   |        | mul_ln141_178   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U236                  | 1   |        | sext_ln141_178  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U236                  | 1   |        | add_ln141_178   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U237                  | 1   |        | mul_ln141_179   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U237                  | 1   |        | sext_ln141_179  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U237                  | 1   |        | add_ln141_179   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U238                  | 1   |        | mul_ln141_180   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U238                  | 1   |        | sext_ln141_180  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U238                  | 1   |        | add_ln141_180   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U239                  | 1   |        | mul_ln141_181   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U239                  | 1   |        | sext_ln141_181  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U239                  | 1   |        | add_ln141_181   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U240                  | 1   |        | mul_ln141_182   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U240                  | 1   |        | sext_ln141_182  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U240                  | 1   |        | add_ln141_182   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U241                  | 1   |        | mul_ln141_183   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U241                  | 1   |        | sext_ln141_183  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U241                  | 1   |        | add_ln141_183   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U242                  | 1   |        | mul_ln141_184   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U242                  | 1   |        | sext_ln141_184  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U242                  | 1   |        | add_ln141_184   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U243                  | 1   |        | mul_ln141_185   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U243                  | 1   |        | sext_ln141_185  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U243                  | 1   |        | add_ln141_185   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U244                  | 1   |        | mul_ln141_186   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U244                  | 1   |        | sext_ln141_186  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U244                  | 1   |        | add_ln141_186   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U245                  | 1   |        | mul_ln141_187   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U245                  | 1   |        | sext_ln141_187  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U245                  | 1   |        | add_ln141_187   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U246                  | 1   |        | mul_ln141_188   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U246                  | 1   |        | sext_ln141_188  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U246                  | 1   |        | add_ln141_188   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U247                  | 1   |        | mul_ln141_189   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U247                  | 1   |        | sext_ln141_189  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U247                  | 1   |        | add_ln141_189   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U248                  | 1   |        | mul_ln141_190   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U248                  | 1   |        | sext_ln141_190  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U248                  | 1   |        | add_ln141_190   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U249                  | 1   |        | mul_ln141_191   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U249                  | 1   |        | sext_ln141_191  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U249                  | 1   |        | add_ln141_191   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U250                  | 1   |        | mul_ln141_192   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U250                  | 1   |        | sext_ln141_192  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U250                  | 1   |        | add_ln141_192   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U251                  | 1   |        | mul_ln141_193   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U251                  | 1   |        | sext_ln141_193  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U251                  | 1   |        | add_ln141_193   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U252                  | 1   |        | mul_ln141_194   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U252                  | 1   |        | sext_ln141_194  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U252                  | 1   |        | add_ln141_194   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U253                  | 1   |        | mul_ln141_195   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U253                  | 1   |        | sext_ln141_195  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U253                  | 1   |        | add_ln141_195   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U254                  | 1   |        | mul_ln141_196   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U254                  | 1   |        | sext_ln141_196  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U254                  | 1   |        | add_ln141_196   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U255                  | 1   |        | mul_ln141_197   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U255                  | 1   |        | sext_ln141_197  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U255                  | 1   |        | add_ln141_197   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U256                  | 1   |        | mul_ln141_198   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U256                  | 1   |        | sext_ln141_198  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U256                  | 1   |        | add_ln141_198   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U257                  | 1   |        | mul_ln141_199   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U257                  | 1   |        | sext_ln141_199  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U257                  | 1   |        | add_ln141_199   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U258                  | 1   |        | mul_ln141_200   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U258                  | 1   |        | sext_ln141_200  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U258                  | 1   |        | add_ln141_200   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U259                  | 1   |        | mul_ln141_201   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U259                  | 1   |        | sext_ln141_201  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U259                  | 1   |        | add_ln141_201   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U260                  | 1   |        | mul_ln141_202   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U260                  | 1   |        | sext_ln141_202  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U260                  | 1   |        | add_ln141_202   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U261                  | 1   |        | mul_ln141_203   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U261                  | 1   |        | sext_ln141_203  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U261                  | 1   |        | add_ln141_203   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U262                  | 1   |        | mul_ln141_204   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U262                  | 1   |        | sext_ln141_204  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U262                  | 1   |        | add_ln141_204   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U263                  | 1   |        | mul_ln141_205   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U263                  | 1   |        | sext_ln141_205  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U263                  | 1   |        | add_ln141_205   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U264                  | 1   |        | mul_ln141_206   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U264                  | 1   |        | sext_ln141_206  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U264                  | 1   |        | add_ln141_206   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U265                  | 1   |        | mul_ln141_207   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U265                  | 1   |        | sext_ln141_207  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U265                  | 1   |        | add_ln141_207   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U266                  | 1   |        | mul_ln141_208   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U266                  | 1   |        | sext_ln141_208  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U266                  | 1   |        | add_ln141_208   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U267                  | 1   |        | mul_ln141_209   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U267                  | 1   |        | sext_ln141_209  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U267                  | 1   |        | add_ln141_209   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U268                  | 1   |        | mul_ln141_210   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U268                  | 1   |        | sext_ln141_210  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U268                  | 1   |        | add_ln141_210   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U269                  | 1   |        | mul_ln141_211   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U269                  | 1   |        | sext_ln141_211  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U269                  | 1   |        | add_ln141_211   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U270                  | 1   |        | mul_ln141_212   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U270                  | 1   |        | sext_ln141_212  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U270                  | 1   |        | add_ln141_212   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U271                  | 1   |        | mul_ln141_213   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U271                  | 1   |        | sext_ln141_213  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U271                  | 1   |        | add_ln141_213   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U272                  | 1   |        | mul_ln141_214   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U272                  | 1   |        | sext_ln141_214  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U272                  | 1   |        | add_ln141_214   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U273                  | 1   |        | mul_ln141_215   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U273                  | 1   |        | sext_ln141_215  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U273                  | 1   |        | add_ln141_215   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U274                  | 1   |        | mul_ln141_216   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U274                  | 1   |        | sext_ln141_216  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U274                  | 1   |        | add_ln141_216   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U275                  | 1   |        | mul_ln141_217   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U275                  | 1   |        | sext_ln141_217  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U275                  | 1   |        | add_ln141_217   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U276                  | 1   |        | mul_ln141_218   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U276                  | 1   |        | sext_ln141_218  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U276                  | 1   |        | add_ln141_218   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U277                  | 1   |        | mul_ln141_219   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U277                  | 1   |        | sext_ln141_219  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U277                  | 1   |        | add_ln141_219   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U278                  | 1   |        | mul_ln141_220   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U278                  | 1   |        | sext_ln141_220  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U278                  | 1   |        | add_ln141_220   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U279                  | 1   |        | mul_ln141_221   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U279                  | 1   |        | sext_ln141_221  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U279                  | 1   |        | add_ln141_221   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U280                  | 1   |        | mul_ln141_222   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U280                  | 1   |        | sext_ln141_222  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U280                  | 1   |        | add_ln141_222   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U281                  | 1   |        | mul_ln141_223   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U281                  | 1   |        | sext_ln141_223  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U281                  | 1   |        | add_ln141_223   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U282                  | 1   |        | mul_ln141_224   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U282                  | 1   |        | sext_ln141_224  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U282                  | 1   |        | add_ln141_224   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U283                  | 1   |        | mul_ln141_225   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U283                  | 1   |        | sext_ln141_225  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U283                  | 1   |        | add_ln141_225   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U284                  | 1   |        | mul_ln141_226   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U284                  | 1   |        | sext_ln141_226  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U284                  | 1   |        | add_ln141_226   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U285                  | 1   |        | mul_ln141_227   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U285                  | 1   |        | sext_ln141_227  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U285                  | 1   |        | add_ln141_227   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U286                  | 1   |        | mul_ln141_228   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U286                  | 1   |        | sext_ln141_228  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U286                  | 1   |        | add_ln141_228   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U287                  | 1   |        | mul_ln141_229   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U287                  | 1   |        | sext_ln141_229  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U287                  | 1   |        | add_ln141_229   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U288                  | 1   |        | mul_ln141_230   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U288                  | 1   |        | sext_ln141_230  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U288                  | 1   |        | add_ln141_230   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U289                  | 1   |        | mul_ln141_231   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U289                  | 1   |        | sext_ln141_231  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U289                  | 1   |        | add_ln141_231   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U290                  | 1   |        | mul_ln141_232   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U290                  | 1   |        | sext_ln141_232  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U290                  | 1   |        | add_ln141_232   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U291                  | 1   |        | mul_ln141_233   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U291                  | 1   |        | sext_ln141_233  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U291                  | 1   |        | add_ln141_233   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U292                  | 1   |        | mul_ln141_234   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U292                  | 1   |        | sext_ln141_234  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U292                  | 1   |        | add_ln141_234   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U293                  | 1   |        | mul_ln141_235   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U293                  | 1   |        | sext_ln141_235  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U293                  | 1   |        | add_ln141_235   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U294                  | 1   |        | mul_ln141_236   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U294                  | 1   |        | sext_ln141_236  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U294                  | 1   |        | add_ln141_236   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U295                  | 1   |        | mul_ln141_237   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U295                  | 1   |        | sext_ln141_237  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U295                  | 1   |        | add_ln141_237   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U296                  | 1   |        | mul_ln141_238   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U296                  | 1   |        | sext_ln141_238  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U296                  | 1   |        | add_ln141_238   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U297                  | 1   |        | mul_ln141_239   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U297                  | 1   |        | sext_ln141_239  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U297                  | 1   |        | add_ln141_239   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U298                  | 1   |        | mul_ln141_240   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U298                  | 1   |        | sext_ln141_240  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U298                  | 1   |        | add_ln141_240   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U299                  | 1   |        | mul_ln141_241   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U299                  | 1   |        | sext_ln141_241  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U299                  | 1   |        | add_ln141_241   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U300                  | 1   |        | mul_ln141_242   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U300                  | 1   |        | sext_ln141_242  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U300                  | 1   |        | add_ln141_242   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U301                  | 1   |        | mul_ln141_243   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U301                  | 1   |        | sext_ln141_243  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U301                  | 1   |        | add_ln141_243   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U302                  | 1   |        | mul_ln141_244   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U302                  | 1   |        | sext_ln141_244  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U302                  | 1   |        | add_ln141_244   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U303                  | 1   |        | mul_ln141_245   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U303                  | 1   |        | sext_ln141_245  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U303                  | 1   |        | add_ln141_245   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U304                  | 1   |        | mul_ln141_246   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U304                  | 1   |        | sext_ln141_246  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U304                  | 1   |        | add_ln141_246   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U305                  | 1   |        | mul_ln141_247   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U305                  | 1   |        | sext_ln141_247  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U305                  | 1   |        | add_ln141_247   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U306                  | 1   |        | mul_ln141_248   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U306                  | 1   |        | sext_ln141_248  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U306                  | 1   |        | add_ln141_248   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U307                  | 1   |        | mul_ln141_249   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U307                  | 1   |        | sext_ln141_249  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U307                  | 1   |        | add_ln141_249   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U308                  | 1   |        | mul_ln141_250   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U308                  | 1   |        | sext_ln141_250  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U308                  | 1   |        | add_ln141_250   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U309                  | 1   |        | mul_ln141_251   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U309                  | 1   |        | sext_ln141_251  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U309                  | 1   |        | add_ln141_251   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U310                  | 1   |        | mul_ln141_252   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U310                  | 1   |        | sext_ln141_252  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U310                  | 1   |        | add_ln141_252   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U311                  | 1   |        | mul_ln141_253   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U311                  | 1   |        | sext_ln141_253  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U311                  | 1   |        | add_ln141_253   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U312                  | 1   |        | mul_ln141_254   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U312                  | 1   |        | sext_ln141_254  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U312                  | 1   |        | add_ln141_254   | add       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U313                  | 1   |        | mul_ln141_255   | mul       | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U313                  | 1   |        | sext_ln141_255  | sext      | dsp_slice                | 3       |
-|    mac_muladd_8s_8s_32s_32_4_1_U313                  | 1   |        | add_ln141_255   | add       | dsp_slice                | 3       |
-+------------------------------------------------------+-----+--------+-----------------+-----------+--------------------------+---------+
++--------------------------------------------------------------+-----+--------+-----------------+-----------+--------------------------+---------+
+| Name                                                         | DSP | Pragma | Variable        | Op        | Impl                     | Latency |
++--------------------------------------------------------------+-----+--------+-----------------+-----------+--------------------------+---------+
+| + mmult_accel                                                | 24  |        |                 |           |                          |         |
+|   icmp_ln131_fu_1648_p2                                      |     |        | icmp_ln131      | setgt     | auto                     | 0       |
+|   cmp221_fu_1654_p2                                          |     |        | cmp221          | setgt     | auto                     | 0       |
+|   mul_32ns_32ns_63_1_1_U821                                  | 4   |        | mul_ln131       | mul       | auto                     | 0       |
+|   select_ln131_fu_1673_p3                                    |     |        | select_ln131    | select    | auto_sel                 | 0       |
+|   empty_fu_1680_p3                                           |     |        | empty           | select    | auto_sel                 | 0       |
+|   smax_fu_1687_p3                                            |     |        | smax            | select    | auto_sel                 | 0       |
+|   smax1_fu_1693_p3                                           |     |        | smax1           | select    | auto_sel                 | 0       |
+|   mul_31ns_31ns_62_1_1_U820                                  | 4   |        | mul_ln109       | mul       | auto                     | 0       |
+|   icmp_ln143_fu_1730_p2                                      |     |        | icmp_ln143      | setlt     | auto                     | 0       |
+|   add_ln145_fu_1739_p2                                       |     |        | add_ln145       | add       | fabric                   | 0       |
+|   icmp_ln145_fu_1749_p2                                      |     |        | icmp_ln145      | setlt     | auto                     | 0       |
+|   xor_ln145_fu_1754_p2                                       |     |        | xor_ln145       | xor       | auto                     | 0       |
+|   sub_ln145_fu_1764_p2                                       |     |        | sub_ln145       | sub       | fabric                   | 0       |
+|   current_block_M_fu_1769_p3                                 |     |        | current_block_M | select    | auto_sel                 | 0       |
+|   cmp245_fu_1781_p2                                          |     |        | cmp245          | setgt     | auto                     | 0       |
+|   empty_101_fu_1787_p3                                       |     |        | empty_101       | select    | auto_sel                 | 0       |
+|   mul_31ns_31ns_62_1_1_U820                                  | 4   |        | mul_ln143       | mul       | auto                     | 0       |
+|   icmp_ln163_fu_1807_p2                                      |     |        | icmp_ln163      | setlt     | auto                     | 0       |
+|   icmp_ln165_fu_1824_p2                                      |     |        | icmp_ln165      | setlt     | auto                     | 0       |
+|   add_ln182_fu_1840_p2                                       |     |        | add_ln182       | add       | fabric                   | 0       |
+|   sub_ln182_fu_1853_p2                                       |     |        | sub_ln182       | sub       | fabric                   | 0       |
+|   sub_ln182_1_fu_1868_p2                                     |     |        | sub_ln182_1     | sub       | fabric                   | 0       |
+|   select_ln182_fu_1884_p3                                    |     |        | select_ln182    | select    | auto_sel                 | 0       |
+|   select_ln182_1_fu_1892_p3                                  |     |        | select_ln182_1  | select    | auto_sel                 | 0       |
+|   icmp_ln182_fu_1914_p2                                      |     |        | icmp_ln182      | seteq     | auto                     | 0       |
+|   k0_1_fu_1924_p2                                            |     |        | k0_1            | add       | fabric                   | 0       |
+|   add_ln165_fu_1930_p2                                       |     |        | add_ln165       | add       | fabric                   | 0       |
+|   add_ln163_fu_1908_p2                                       |     |        | add_ln163       | add       | fabric                   | 0       |
+|  + mmult_accel_Pipeline_copy_A_VITIS_LOOP_132_1              | 0   |        |                 |           |                          |         |
+|    icmp_ln132_fu_170_p2                                      |     |        | icmp_ln132      | setlt     | auto                     | 0       |
+|    icmp_ln131_fu_142_p2                                      |     |        | icmp_ln131      | seteq     | auto                     | 0       |
+|    add_ln131_1_fu_147_p2                                     |     |        | add_ln131_1     | add       | fabric                   | 0       |
+|    add_ln131_fu_178_p2                                       |     |        | add_ln131       | add       | fabric                   | 0       |
+|    select_ln131_fu_184_p3                                    |     |        | select_ln131    | select    | auto_sel                 | 0       |
+|    select_ln131_1_fu_192_p3                                  |     |        | select_ln131_1  | select    | auto_sel                 | 0       |
+|    sub_ln134_fu_224_p2                                       |     |        | sub_ln134       | sub       | fabric                   | 0       |
+|    add_ln134_fu_238_p2                                       |     |        | add_ln134       | add       | fabric                   | 0       |
+|    add_ln132_fu_244_p2                                       |     |        | add_ln132       | add       | fabric                   | 0       |
+|  + mmult_accel_Pipeline_copy_B_block_VITIS_LOOP_153_2        | 4   |        |                 |           |                          |         |
+|    icmp_ln153_fu_195_p2                                      |     |        | icmp_ln153      | setlt     | auto                     | 0       |
+|    icmp_ln152_fu_200_p2                                      |     |        | icmp_ln152      | seteq     | auto                     | 0       |
+|    add_ln152_1_fu_205_p2                                     |     |        | add_ln152_1     | add       | fabric                   | 0       |
+|    add_ln152_fu_214_p2                                       |     |        | add_ln152       | add       | fabric                   | 0       |
+|    select_ln152_fu_220_p3                                    |     |        | select_ln152    | select    | auto_sel                 | 0       |
+|    select_ln152_1_fu_228_p3                                  |     |        | select_ln152_1  | select    | auto_sel                 | 0       |
+|    first_iter_1_fu_240_p2                                    |     |        | first_iter_1    | seteq     | auto                     | 0       |
+|    mul_32ns_31ns_63_1_1_U6                                   | 4   |        | empty_98        | mul       | auto                     | 0       |
+|    tmp91_fu_251_p2                                           |     |        | tmp91           | add       | fabric                   | 0       |
+|    empty_99_fu_260_p2                                        |     |        | empty_99        | add       | fabric                   | 0       |
+|    add_ln155_fu_283_p2                                       |     |        | add_ln155       | add       | fabric                   | 0       |
+|    add_ln153_fu_289_p2                                       |     |        | add_ln153       | add       | fabric                   | 0       |
+|  + tile_k_compute                                            | 8   |        |                 |           |                          |         |
+|   + load_A_tile_k                                            | 0   |        |                 |           |                          |         |
+|     icmp_ln21_fu_144_p2                                      |     |        | icmp_ln21       | seteq     | auto                     | 0       |
+|     add_ln21_1_fu_150_p2                                     |     |        | add_ln21_1      | add       | fabric                   | 0       |
+|     add_ln21_fu_162_p2                                       |     |        | add_ln21        | add       | fabric                   | 0       |
+|     icmp_ln22_fu_168_p2                                      |     |        | icmp_ln22       | seteq     | auto                     | 0       |
+|     select_ln21_fu_174_p3                                    |     |        | select_ln21     | select    | auto_sel                 | 0       |
+|     select_ln21_1_fu_182_p3                                  |     |        | select_ln21_1   | select    | auto_sel                 | 0       |
+|     empty_fu_194_p2                                          |     |        | empty           | add       | fabric                   | 0       |
+|     sub_ln26_fu_224_p2                                       |     |        | sub_ln26        | sub       | fabric                   | 0       |
+|     cmp6_fu_238_p2                                           |     |        | cmp6            | setlt     | auto                     | 0       |
+|     add_ln25_fu_248_p2                                       |     |        | add_ln25        | add       | fabric                   | 0       |
+|     add_ln26_fu_258_p2                                       |     |        | add_ln26        | add       | fabric                   | 0       |
+|     icmp_ln26_fu_273_p2                                      |     |        | icmp_ln26       | setlt     | auto                     | 0       |
+|     and_ln26_fu_279_p2                                       |     |        | and_ln26        | and       | auto                     | 0       |
+|     streamA_din                                              |     |        | a_val           | select    | auto_sel                 | 0       |
+|     add_ln22_fu_285_p2                                       |     |        | add_ln22        | add       | fabric                   | 0       |
+|   + load_B_tile_k                                            | 0   |        |                 |           |                          |         |
+|     icmp_ln37_fu_140_p2                                      |     |        | icmp_ln37       | seteq     | auto                     | 0       |
+|     add_ln37_1_fu_146_p2                                     |     |        | add_ln37_1      | add       | fabric                   | 0       |
+|     add_ln37_fu_158_p2                                       |     |        | add_ln37        | add       | fabric                   | 0       |
+|     icmp_ln38_fu_164_p2                                      |     |        | icmp_ln38       | seteq     | auto                     | 0       |
+|     select_ln37_fu_170_p3                                    |     |        | select_ln37     | select    | auto_sel                 | 0       |
+|     select_ln37_1_fu_178_p3                                  |     |        | select_ln37_1   | select    | auto_sel                 | 0       |
+|     empty_fu_190_p2                                          |     |        | empty           | add       | fabric                   | 0       |
+|     cmp6_fu_212_p2                                           |     |        | cmp6            | setlt     | auto                     | 0       |
+|     add_ln41_fu_222_p2                                       |     |        | add_ln41        | add       | fabric                   | 0       |
+|     add_ln42_fu_232_p2                                       |     |        | add_ln42        | add       | fabric                   | 0       |
+|     icmp_ln42_fu_247_p2                                      |     |        | icmp_ln42       | setlt     | auto                     | 0       |
+|     and_ln42_fu_253_p2                                       |     |        | and_ln42        | and       | auto                     | 0       |
+|     streamB_din                                              |     |        | b_val           | select    | auto_sel                 | 0       |
+|     add_ln38_fu_259_p2                                       |     |        | add_ln38        | add       | fabric                   | 0       |
+|   + compute_tile_k                                           | 8   |        |                 |           |                          |         |
+|    + compute_tile_k_Pipeline_VITIS_LOOP_60_1_VITIS_LOOP_61_2 | 0   |        |                 |           |                          |         |
+|      icmp_ln60_fu_218_p2                                     |     |        | icmp_ln60       | seteq     | auto                     | 0       |
+|      add_ln60_1_fu_224_p2                                    |     |        | add_ln60_1      | add       | fabric                   | 0       |
+|      add_ln60_fu_241_p2                                      |     |        | add_ln60        | add       | fabric                   | 0       |
+|      icmp_ln61_fu_247_p2                                     |     |        | icmp_ln61       | seteq     | auto                     | 0       |
+|      select_ln60_fu_253_p3                                   |     |        | select_ln60     | select    | auto_sel                 | 0       |
+|      select_ln60_1_fu_261_p3                                 |     |        | select_ln60_1   | select    | auto_sel                 | 0       |
+|      add_ln61_fu_285_p2                                      |     |        | add_ln61        | add       | fabric                   | 0       |
+|    + compute_tile_k_Pipeline_VITIS_LOOP_67_3_VITIS_LOOP_68_4 | 0   |        |                 |           |                          |         |
+|      icmp_ln67_fu_218_p2                                     |     |        | icmp_ln67       | seteq     | auto                     | 0       |
+|      add_ln67_1_fu_224_p2                                    |     |        | add_ln67_1      | add       | fabric                   | 0       |
+|      add_ln67_fu_241_p2                                      |     |        | add_ln67        | add       | fabric                   | 0       |
+|      icmp_ln68_fu_247_p2                                     |     |        | icmp_ln68       | seteq     | auto                     | 0       |
+|      select_ln67_fu_253_p3                                   |     |        | select_ln67     | select    | auto_sel                 | 0       |
+|      select_ln67_1_fu_261_p3                                 |     |        | select_ln67_1   | select    | auto_sel                 | 0       |
+|      add_ln68_fu_285_p2                                      |     |        | add_ln68        | add       | fabric                   | 0       |
+|    + compute_tile_k_Pipeline_VITIS_LOOP_75_5_VITIS_LOOP_76_6 | 8   |        |                 |           |                          |         |
+|      icmp_ln75_fu_2388_p2                                    |     |        | icmp_ln75       | seteq     | auto                     | 0       |
+|      add_ln75_1_fu_2394_p2                                   |     |        | add_ln75_1      | add       | fabric                   | 0       |
+|      add_ln75_fu_2406_p2                                     |     |        | add_ln75        | add       | fabric                   | 0       |
+|      icmp_ln76_fu_2412_p2                                    |     |        | icmp_ln76       | seteq     | auto                     | 0       |
+|      select_ln75_fu_2418_p3                                  |     |        | select_ln75     | select    | auto_sel                 | 0       |
+|      select_ln75_1_fu_2426_p3                                |     |        | select_ln75_1   | select    | auto_sel                 | 0       |
+|      sparsemux_17_3_8_1_1_U174                               |     |        | tmp             | sparsemux | compactencoding_dontcare | 0       |
+|      sparsemux_17_3_8_1_1_U175                               |     |        | tmp_9           | sparsemux | compactencoding_dontcare | 0       |
+|      sparsemux_17_3_8_1_1_U176                               |     |        | tmp_s           | sparsemux | compactencoding_dontcare | 0       |
+|      sparsemux_17_3_8_1_1_U177                               |     |        | tmp_1           | sparsemux | compactencoding_dontcare | 0       |
+|      sparsemux_17_3_8_1_1_U178                               |     |        | tmp_2           | sparsemux | compactencoding_dontcare | 0       |
+|      sparsemux_17_3_8_1_1_U179                               |     |        | tmp_3           | sparsemux | compactencoding_dontcare | 0       |
+|      sparsemux_17_3_8_1_1_U180                               |     |        | tmp_4           | sparsemux | compactencoding_dontcare | 0       |
+|      sparsemux_17_3_8_1_1_U181                               |     |        | tmp_5           | sparsemux | compactencoding_dontcare | 0       |
+|      sparsemux_17_3_8_1_1_U182                               |     |        | tmp_6           | sparsemux | compactencoding_dontcare | 0       |
+|      mac_muladd_8s_8s_32s_32_4_1_U191                        | 1   |        | mul_ln80        | mul       | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U191                        | 1   |        | sext_ln80_1     | sext      | dsp_slice                | 3       |
+|      sparsemux_17_3_32_1_1_U183                              |     |        | tmp_7           | sparsemux | compactencoding_dontcare | 0       |
+|      mac_muladd_8s_8s_32s_32_4_1_U191                        | 1   |        | add_ln80        | add       | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U192                        | 1   |        | mul_ln80_1      | mul       | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U192                        | 1   |        | sext_ln80_2     | sext      | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U193                        | 1   |        | mul_ln80_2      | mul       | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U193                        | 1   |        | sext_ln80_3     | sext      | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U194                        | 1   |        | mul_ln80_3      | mul       | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U194                        | 1   |        | sext_ln80_4     | sext      | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U195                        | 1   |        | mul_ln80_4      | mul       | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U195                        | 1   |        | sext_ln80_5     | sext      | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U196                        | 1   |        | mul_ln80_5      | mul       | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U196                        | 1   |        | sext_ln80_6     | sext      | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U197                        | 1   |        | mul_ln80_6      | mul       | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U197                        | 1   |        | sext_ln80_7     | sext      | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U198                        | 1   |        | mul_ln80_7      | mul       | dsp_slice                | 3       |
+|      mac_muladd_8s_8s_32s_32_4_1_U198                        | 1   |        | sext_ln80_8     | sext      | dsp_slice                | 3       |
+|      sparsemux_17_3_32_1_1_U184                              |     |        | tmp_8           | sparsemux | compactencoding_dontcare | 0       |
+|      mac_muladd_8s_8s_32s_32_4_1_U192                        | 1   |        | add_ln80_1      | add       | dsp_slice                | 3       |
+|      sparsemux_17_3_32_1_1_U185                              |     |        | tmp_10          | sparsemux | compactencoding_dontcare | 0       |
+|      mac_muladd_8s_8s_32s_32_4_1_U193                        | 1   |        | add_ln80_2      | add       | dsp_slice                | 3       |
+|      sparsemux_17_3_32_1_1_U186                              |     |        | tmp_11          | sparsemux | compactencoding_dontcare | 0       |
+|      mac_muladd_8s_8s_32s_32_4_1_U194                        | 1   |        | add_ln80_3      | add       | dsp_slice                | 3       |
+|      sparsemux_17_3_32_1_1_U187                              |     |        | tmp_12          | sparsemux | compactencoding_dontcare | 0       |
+|      mac_muladd_8s_8s_32s_32_4_1_U195                        | 1   |        | add_ln80_4      | add       | dsp_slice                | 3       |
+|      sparsemux_17_3_32_1_1_U188                              |     |        | tmp_13          | sparsemux | compactencoding_dontcare | 0       |
+|      mac_muladd_8s_8s_32s_32_4_1_U196                        | 1   |        | add_ln80_5      | add       | dsp_slice                | 3       |
+|      sparsemux_17_3_32_1_1_U189                              |     |        | tmp_14          | sparsemux | compactencoding_dontcare | 0       |
+|      mac_muladd_8s_8s_32s_32_4_1_U197                        | 1   |        | add_ln80_6      | add       | dsp_slice                | 3       |
+|      sparsemux_17_3_32_1_1_U190                              |     |        | tmp_15          | sparsemux | compactencoding_dontcare | 0       |
+|      mac_muladd_8s_8s_32s_32_4_1_U198                        | 1   |        | add_ln80_7      | add       | dsp_slice                | 3       |
+|      add_ln76_fu_2774_p2                                     |     |        | add_ln76        | add       | fabric                   | 0       |
+|  + mmult_accel_Pipeline_writeC_VITIS_LOOP_189_4              | 4   |        |                 |           |                          |         |
+|    icmp_ln188_fu_727_p2                                      |     |        | icmp_ln188      | seteq     | auto                     | 0       |
+|    add_ln188_1_fu_733_p2                                     |     |        | add_ln188_1     | add       | fabric                   | 0       |
+|    add_ln188_fu_745_p2                                       |     |        | add_ln188       | add       | fabric                   | 0       |
+|    icmp_ln189_fu_751_p2                                      |     |        | icmp_ln189      | seteq     | auto                     | 0       |
+|    select_ln188_fu_757_p3                                    |     |        | select_ln188    | select    | auto_sel                 | 0       |
+|    select_ln188_1_fu_765_p3                                  |     |        | select_ln188_1  | select    | auto_sel                 | 0       |
+|    empty_fu_781_p2                                           |     |        | empty           | add       | fabric                   | 0       |
+|    cmp89_fu_792_p2                                           |     |        | cmp89           | setlt     | auto                     | 0       |
+|    mul_32ns_32s_62_1_1_U737                                  | 4   |        | empty_96        | mul       | auto                     | 0       |
+|    add_ln192_fu_806_p2                                       |     |        | add_ln192       | add       | fabric                   | 0       |
+|    icmp_ln193_fu_812_p2                                      |     |        | icmp_ln193      | setlt     | auto                     | 0       |
+|    and_ln193_fu_818_p2                                       |     |        | and_ln193       | and       | auto                     | 0       |
+|    sparsemux_17_3_32_1_1_U738                                |     |        | tmp             | sparsemux | compactencoding_dontcare | 0       |
+|    sparsemux_17_3_32_1_1_U739                                |     |        | tmp_1           | sparsemux | compactencoding_dontcare | 0       |
+|    sparsemux_17_3_32_1_1_U740                                |     |        | tmp_2           | sparsemux | compactencoding_dontcare | 0       |
+|    sparsemux_17_3_32_1_1_U741                                |     |        | tmp_3           | sparsemux | compactencoding_dontcare | 0       |
+|    sparsemux_17_3_32_1_1_U742                                |     |        | tmp_4           | sparsemux | compactencoding_dontcare | 0       |
+|    sparsemux_17_3_32_1_1_U743                                |     |        | tmp_5           | sparsemux | compactencoding_dontcare | 0       |
+|    sparsemux_17_3_32_1_1_U744                                |     |        | tmp_6           | sparsemux | compactencoding_dontcare | 0       |
+|    sparsemux_17_3_32_1_1_U745                                |     |        | tmp_7           | sparsemux | compactencoding_dontcare | 0       |
+|    sparsemux_17_3_32_1_1_U746                                |     |        | tmp_8           | sparsemux | compactencoding_dontcare | 0       |
+|    add_ln194_fu_1184_p2                                      |     |        | add_ln194       | add       | fabric                   | 0       |
+|    add_ln194_1_fu_1194_p2                                    |     |        | add_ln194_1     | add       | fabric                   | 0       |
+|    add_ln194_2_fu_1228_p2                                    |     |        | add_ln194_2     | add       | fabric                   | 0       |
+|    add_ln189_fu_1200_p2                                      |     |        | add_ln189       | add       | fabric                   | 0       |
++--------------------------------------------------------------+-----+--------+-----------------+-----------+--------------------------+---------+
 
 
 ================================================================
 == Storage Report
 ================================================================
-+-------------------+--------------+-----------+------+------+--------+-----------+------+---------+------------------+
-| Name              | Usage        | Type      | BRAM | URAM | Pragma | Variable  | Impl | Latency | Bitwidth, Depth, |
-|                   |              |           |      |      |        |           |      |         | Banks            |
-+-------------------+--------------+-----------+------+------+--------+-----------+------+---------+------------------+
-| + mmult_accel     |              |           | 126  | 0    |        |           |      |         |                  |
-|   control_s_axi_U | interface    | s_axilite |      |      |        |           |      |         |                  |
-|   gmemA_m_axi_U   | interface    | m_axi     | 2    |      |        |           |      |         |                  |
-|   gmemB_m_axi_U   | interface    | m_axi     | 2    |      |        |           |      |         |                  |
-|   gmemC_m_axi_U   | interface    | m_axi     | 2    |      |        |           |      |         |                  |
-|   A_bram_U        | ram_2p array |           | 24   |      | yes    | A_bram    | bram | 1       | 8, 49152, 1      |
-|   B_local_U       | ram_2p array |           | 96   |      | yes    | B_local   | bram | 1       | 8, 196608, 1     |
-|   localA_U        | ram_1p array |           |      |      |        | localA    | auto | 1       | 8, 16, 1         |
-|   localA_1_U      | ram_1p array |           |      |      |        | localA_1  | auto | 1       | 8, 16, 1         |
-|   localA_2_U      | ram_1p array |           |      |      |        | localA_2  | auto | 1       | 8, 16, 1         |
-|   localA_3_U      | ram_1p array |           |      |      |        | localA_3  | auto | 1       | 8, 16, 1         |
-|   localA_4_U      | ram_1p array |           |      |      |        | localA_4  | auto | 1       | 8, 16, 1         |
-|   localA_5_U      | ram_1p array |           |      |      |        | localA_5  | auto | 1       | 8, 16, 1         |
-|   localA_6_U      | ram_1p array |           |      |      |        | localA_6  | auto | 1       | 8, 16, 1         |
-|   localA_7_U      | ram_1p array |           |      |      |        | localA_7  | auto | 1       | 8, 16, 1         |
-|   localA_8_U      | ram_1p array |           |      |      |        | localA_8  | auto | 1       | 8, 16, 1         |
-|   localA_9_U      | ram_1p array |           |      |      |        | localA_9  | auto | 1       | 8, 16, 1         |
-|   localA_10_U     | ram_1p array |           |      |      |        | localA_10 | auto | 1       | 8, 16, 1         |
-|   localA_11_U     | ram_1p array |           |      |      |        | localA_11 | auto | 1       | 8, 16, 1         |
-|   localA_12_U     | ram_1p array |           |      |      |        | localA_12 | auto | 1       | 8, 16, 1         |
-|   localA_13_U     | ram_1p array |           |      |      |        | localA_13 | auto | 1       | 8, 16, 1         |
-|   localA_14_U     | ram_1p array |           |      |      |        | localA_14 | auto | 1       | 8, 16, 1         |
-|   localA_15_U     | ram_1p array |           |      |      |        | localA_15 | auto | 1       | 8, 16, 1         |
-|   localB_U        | ram_1p array |           |      |      |        | localB    | auto | 1       | 8, 16, 1         |
-|   localB_1_U      | ram_1p array |           |      |      |        | localB_1  | auto | 1       | 8, 16, 1         |
-|   localB_2_U      | ram_1p array |           |      |      |        | localB_2  | auto | 1       | 8, 16, 1         |
-|   localB_3_U      | ram_1p array |           |      |      |        | localB_3  | auto | 1       | 8, 16, 1         |
-|   localB_4_U      | ram_1p array |           |      |      |        | localB_4  | auto | 1       | 8, 16, 1         |
-|   localB_5_U      | ram_1p array |           |      |      |        | localB_5  | auto | 1       | 8, 16, 1         |
-|   localB_6_U      | ram_1p array |           |      |      |        | localB_6  | auto | 1       | 8, 16, 1         |
-|   localB_7_U      | ram_1p array |           |      |      |        | localB_7  | auto | 1       | 8, 16, 1         |
-|   localB_8_U      | ram_1p array |           |      |      |        | localB_8  | auto | 1       | 8, 16, 1         |
-|   localB_9_U      | ram_1p array |           |      |      |        | localB_9  | auto | 1       | 8, 16, 1         |
-|   localB_10_U     | ram_1p array |           |      |      |        | localB_10 | auto | 1       | 8, 16, 1         |
-|   localB_11_U     | ram_1p array |           |      |      |        | localB_11 | auto | 1       | 8, 16, 1         |
-|   localB_12_U     | ram_1p array |           |      |      |        | localB_12 | auto | 1       | 8, 16, 1         |
-|   localB_13_U     | ram_1p array |           |      |      |        | localB_13 | auto | 1       | 8, 16, 1         |
-|   localB_14_U     | ram_1p array |           |      |      |        | localB_14 | auto | 1       | 8, 16, 1         |
-|   localB_15_U     | ram_1p array |           |      |      |        | localB_15 | auto | 1       | 8, 16, 1         |
-+-------------------+--------------+-----------+------+------+--------+-----------+------+---------+------------------+
++----------------------+--------------+-------------+------+------+--------+-----------------+------+---------+------------------+
+| Name                 | Usage        | Type        | BRAM | URAM | Pragma | Variable        | Impl | Latency | Bitwidth, Depth, |
+|                      |              |             |      |      |        |                 |      |         | Banks            |
++----------------------+--------------+-------------+------+------+--------+-----------------+------+---------+------------------+
+| + mmult_accel        |              |             | 78   | 0    |        |                 |      |         |                  |
+|   control_s_axi_U    | interface    | s_axilite   |      |      |        |                 |      |         |                  |
+|   gmemA_m_axi_U      | interface    | m_axi       | 2    |      |        |                 |      |         |                  |
+|   gmemB_m_axi_U      | interface    | m_axi       | 2    |      |        |                 |      |         |                  |
+|   gmemC_m_axi_U      | interface    | m_axi       | 2    |      |        |                 |      |         |                  |
+|   A_bram_U           | ram_2p array |             | 24   |      | yes    | A_bram          | bram | 1       | 8, 49152, 1      |
+|   B_local_U          | ram_2p array |             | 48   |      | yes    | B_local         | bram | 1       | 8, 98304, 1      |
+|  + tile_k_compute    |              |             | 0    | 0    |        |                 |      |         |                  |
+|    localC_0_0_in_c_U | fifo channel | scalar prop |      |      |        | localC_0_0_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_0_1_in_c_U | fifo channel | scalar prop |      |      |        | localC_0_1_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_0_2_in_c_U | fifo channel | scalar prop |      |      |        | localC_0_2_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_0_3_in_c_U | fifo channel | scalar prop |      |      |        | localC_0_3_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_0_4_in_c_U | fifo channel | scalar prop |      |      |        | localC_0_4_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_0_5_in_c_U | fifo channel | scalar prop |      |      |        | localC_0_5_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_0_6_in_c_U | fifo channel | scalar prop |      |      |        | localC_0_6_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_0_7_in_c_U | fifo channel | scalar prop |      |      |        | localC_0_7_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_1_0_in_c_U | fifo channel | scalar prop |      |      |        | localC_1_0_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_1_1_in_c_U | fifo channel | scalar prop |      |      |        | localC_1_1_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_1_2_in_c_U | fifo channel | scalar prop |      |      |        | localC_1_2_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_1_3_in_c_U | fifo channel | scalar prop |      |      |        | localC_1_3_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_1_4_in_c_U | fifo channel | scalar prop |      |      |        | localC_1_4_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_1_5_in_c_U | fifo channel | scalar prop |      |      |        | localC_1_5_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_1_6_in_c_U | fifo channel | scalar prop |      |      |        | localC_1_6_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_1_7_in_c_U | fifo channel | scalar prop |      |      |        | localC_1_7_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_2_0_in_c_U | fifo channel | scalar prop |      |      |        | localC_2_0_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_2_1_in_c_U | fifo channel | scalar prop |      |      |        | localC_2_1_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_2_2_in_c_U | fifo channel | scalar prop |      |      |        | localC_2_2_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_2_3_in_c_U | fifo channel | scalar prop |      |      |        | localC_2_3_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_2_4_in_c_U | fifo channel | scalar prop |      |      |        | localC_2_4_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_2_5_in_c_U | fifo channel | scalar prop |      |      |        | localC_2_5_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_2_6_in_c_U | fifo channel | scalar prop |      |      |        | localC_2_6_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_2_7_in_c_U | fifo channel | scalar prop |      |      |        | localC_2_7_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_3_0_in_c_U | fifo channel | scalar prop |      |      |        | localC_3_0_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_3_1_in_c_U | fifo channel | scalar prop |      |      |        | localC_3_1_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_3_2_in_c_U | fifo channel | scalar prop |      |      |        | localC_3_2_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_3_3_in_c_U | fifo channel | scalar prop |      |      |        | localC_3_3_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_3_4_in_c_U | fifo channel | scalar prop |      |      |        | localC_3_4_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_3_5_in_c_U | fifo channel | scalar prop |      |      |        | localC_3_5_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_3_6_in_c_U | fifo channel | scalar prop |      |      |        | localC_3_6_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_3_7_in_c_U | fifo channel | scalar prop |      |      |        | localC_3_7_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_4_0_in_c_U | fifo channel | scalar prop |      |      |        | localC_4_0_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_4_1_in_c_U | fifo channel | scalar prop |      |      |        | localC_4_1_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_4_2_in_c_U | fifo channel | scalar prop |      |      |        | localC_4_2_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_4_3_in_c_U | fifo channel | scalar prop |      |      |        | localC_4_3_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_4_4_in_c_U | fifo channel | scalar prop |      |      |        | localC_4_4_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_4_5_in_c_U | fifo channel | scalar prop |      |      |        | localC_4_5_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_4_6_in_c_U | fifo channel | scalar prop |      |      |        | localC_4_6_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_4_7_in_c_U | fifo channel | scalar prop |      |      |        | localC_4_7_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_5_0_in_c_U | fifo channel | scalar prop |      |      |        | localC_5_0_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_5_1_in_c_U | fifo channel | scalar prop |      |      |        | localC_5_1_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_5_2_in_c_U | fifo channel | scalar prop |      |      |        | localC_5_2_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_5_3_in_c_U | fifo channel | scalar prop |      |      |        | localC_5_3_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_5_4_in_c_U | fifo channel | scalar prop |      |      |        | localC_5_4_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_5_5_in_c_U | fifo channel | scalar prop |      |      |        | localC_5_5_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_5_6_in_c_U | fifo channel | scalar prop |      |      |        | localC_5_6_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_5_7_in_c_U | fifo channel | scalar prop |      |      |        | localC_5_7_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_6_0_in_c_U | fifo channel | scalar prop |      |      |        | localC_6_0_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_6_1_in_c_U | fifo channel | scalar prop |      |      |        | localC_6_1_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_6_2_in_c_U | fifo channel | scalar prop |      |      |        | localC_6_2_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_6_3_in_c_U | fifo channel | scalar prop |      |      |        | localC_6_3_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_6_4_in_c_U | fifo channel | scalar prop |      |      |        | localC_6_4_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_6_5_in_c_U | fifo channel | scalar prop |      |      |        | localC_6_5_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_6_6_in_c_U | fifo channel | scalar prop |      |      |        | localC_6_6_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_6_7_in_c_U | fifo channel | scalar prop |      |      |        | localC_6_7_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_7_0_in_c_U | fifo channel | scalar prop |      |      |        | localC_7_0_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_7_1_in_c_U | fifo channel | scalar prop |      |      |        | localC_7_1_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_7_2_in_c_U | fifo channel | scalar prop |      |      |        | localC_7_2_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_7_3_in_c_U | fifo channel | scalar prop |      |      |        | localC_7_3_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_7_4_in_c_U | fifo channel | scalar prop |      |      |        | localC_7_4_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_7_5_in_c_U | fifo channel | scalar prop |      |      |        | localC_7_5_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_7_6_in_c_U | fifo channel | scalar prop |      |      |        | localC_7_6_in_c | srl  | 0       | 32, 3, 1         |
+|    localC_7_7_in_c_U | fifo channel | scalar prop |      |      |        | localC_7_7_in_c | srl  | 0       | 32, 3, 1         |
+|    streamA_U         | fifo channel | stream      |      |      |        | streamA         | srl  | 0       | 8, 64, 1         |
+|    streamB_U         | fifo channel | stream      |      |      |        | streamB         | srl  | 0       | 8, 64, 1         |
+|   + compute_tile_k   |              |             | 0    | 0    |        |                 |      |         |                  |
+|     A_tile_U         | ram_1p array |             |      |      |        | A_tile          | auto | 1       | 8, 8, 1          |
+|     A_tile_1_U       | ram_1p array |             |      |      |        | A_tile_1        | auto | 1       | 8, 8, 1          |
+|     A_tile_2_U       | ram_1p array |             |      |      |        | A_tile_2        | auto | 1       | 8, 8, 1          |
+|     A_tile_3_U       | ram_1p array |             |      |      |        | A_tile_3        | auto | 1       | 8, 8, 1          |
+|     A_tile_4_U       | ram_1p array |             |      |      |        | A_tile_4        | auto | 1       | 8, 8, 1          |
+|     A_tile_5_U       | ram_1p array |             |      |      |        | A_tile_5        | auto | 1       | 8, 8, 1          |
+|     A_tile_6_U       | ram_1p array |             |      |      |        | A_tile_6        | auto | 1       | 8, 8, 1          |
+|     A_tile_7_U       | ram_1p array |             |      |      |        | A_tile_7        | auto | 1       | 8, 8, 1          |
+|     B_tile_U         | ram_2p array |             |      |      |        | B_tile          | auto | 1       | 8, 8, 1          |
+|     B_tile_1_U       | ram_2p array |             |      |      |        | B_tile_1        | auto | 1       | 8, 8, 1          |
+|     B_tile_2_U       | ram_2p array |             |      |      |        | B_tile_2        | auto | 1       | 8, 8, 1          |
+|     B_tile_3_U       | ram_2p array |             |      |      |        | B_tile_3        | auto | 1       | 8, 8, 1          |
+|     B_tile_4_U       | ram_2p array |             |      |      |        | B_tile_4        | auto | 1       | 8, 8, 1          |
+|     B_tile_5_U       | ram_2p array |             |      |      |        | B_tile_5        | auto | 1       | 8, 8, 1          |
+|     B_tile_6_U       | ram_2p array |             |      |      |        | B_tile_6        | auto | 1       | 8, 8, 1          |
+|     B_tile_7_U       | ram_2p array |             |      |      |        | B_tile_7        | auto | 1       | 8, 8, 1          |
++----------------------+--------------+-------------+------+------+--------+-----------------+------+---------+------------------+
 
 
 ================================================================
 == Pragma Report
 ================================================================
 * Valid Pragma Syntax
-+-----------------+----------------------------------------------------------------+-----------------------------------------------+
-| Type            | Options                                                        | Location                                      |
-+-----------------+----------------------------------------------------------------+-----------------------------------------------+
-| interface       | m_axi port = A offset = slave bundle = gmemA depth = 64 * 768  | ../mmult_accel.cpp:25 in mmult_accel          |
-| interface       | m_axi port = B offset = slave bundle = gmemB depth = 768 * 768 | ../mmult_accel.cpp:26 in mmult_accel          |
-| interface       | m_axi port = C offset = slave bundle = gmemC depth = 64 * 768  | ../mmult_accel.cpp:27 in mmult_accel          |
-| interface       | s_axilite port = A bundle = control                            | ../mmult_accel.cpp:28 in mmult_accel          |
-| interface       | s_axilite port = B bundle = control                            | ../mmult_accel.cpp:29 in mmult_accel          |
-| interface       | s_axilite port = C bundle = control                            | ../mmult_accel.cpp:30 in mmult_accel          |
-| interface       | s_axilite port = N bundle = control                            | ../mmult_accel.cpp:31 in mmult_accel          |
-| interface       | s_axilite port = K bundle = control                            | ../mmult_accel.cpp:32 in mmult_accel          |
-| interface       | s_axilite port = M bundle = control                            | ../mmult_accel.cpp:33 in mmult_accel          |
-| interface       | s_axilite port = return bundle = control                       | ../mmult_accel.cpp:34 in mmult_accel          |
-| bind_storage    | variable=A_bram type=ram_2p impl=bram                          | ../mmult_accel.cpp:40 in mmult_accel, A_bram  |
-| pipeline        | II=1                                                           | ../mmult_accel.cpp:45 in mmult_accel          |
-| bind_storage    | variable=B_local type=ram_2p impl=bram                         | ../mmult_accel.cpp:61 in mmult_accel, B_local |
-| pipeline        | II=1                                                           | ../mmult_accel.cpp:66 in mmult_accel          |
-| array_partition | variable=localC dim=0 complete                                 | ../mmult_accel.cpp:82 in mmult_accel, localC  |
-| unroll          |                                                                | ../mmult_accel.cpp:87 in mmult_accel          |
-| unroll          |                                                                | ../mmult_accel.cpp:89 in mmult_accel          |
-| array_partition | variable=localA dim=1 complete                                 | ../mmult_accel.cpp:97 in mmult_accel, localA  |
-| array_partition | variable=localB dim=2 complete                                 | ../mmult_accel.cpp:98 in mmult_accel, localB  |
-| pipeline        | II=1                                                           | ../mmult_accel.cpp:107 in mmult_accel         |
-| pipeline        | II=1                                                           | ../mmult_accel.cpp:121 in mmult_accel         |
-| pipeline        | II=1                                                           | ../mmult_accel.cpp:134 in mmult_accel         |
-| unroll          |                                                                | ../mmult_accel.cpp:136 in mmult_accel         |
-| unroll          |                                                                | ../mmult_accel.cpp:138 in mmult_accel         |
-| pipeline        | II=1                                                           | ../mmult_accel.cpp:151 in mmult_accel         |
-+-----------------+----------------------------------------------------------------+-----------------------------------------------+
++-----------------+----------------------------------------------------------------+--------------------------------------------------+
+| Type            | Options                                                        | Location                                         |
++-----------------+----------------------------------------------------------------+--------------------------------------------------+
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:23 in load_a_tile_k           |
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:39 in load_b_tile_k           |
+| array_partition | variable=A_tile dim=2 complete                                 | ../mmult_accel.cpp:56 in compute_tile_k, A_tile  |
+| array_partition | variable=B_tile dim=1 complete                                 | ../mmult_accel.cpp:57 in compute_tile_k, B_tile  |
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:62 in compute_tile_k          |
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:69 in compute_tile_k          |
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:77 in compute_tile_k          |
+| unroll          |                                                                | ../mmult_accel.cpp:79 in compute_tile_k          |
+| stream          | variable=streamA depth=64                                      | ../mmult_accel.cpp:96 in tile_k_compute, streamA |
+| stream          | variable=streamB depth=64                                      | ../mmult_accel.cpp:97 in tile_k_compute, streamB |
+| dataflow        |                                                                | ../mmult_accel.cpp:99 in tile_k_compute          |
+| interface       | m_axi port = A offset = slave bundle = gmemA depth = 64 * 768  | ../mmult_accel.cpp:113 in mmult_accel            |
+| interface       | m_axi port = B offset = slave bundle = gmemB depth = 768 * 768 | ../mmult_accel.cpp:114 in mmult_accel            |
+| interface       | m_axi port = C offset = slave bundle = gmemC depth = 64 * 768  | ../mmult_accel.cpp:115 in mmult_accel            |
+| interface       | s_axilite port = A bundle = control                            | ../mmult_accel.cpp:116 in mmult_accel            |
+| interface       | s_axilite port = B bundle = control                            | ../mmult_accel.cpp:117 in mmult_accel            |
+| interface       | s_axilite port = C bundle = control                            | ../mmult_accel.cpp:118 in mmult_accel            |
+| interface       | s_axilite port = N bundle = control                            | ../mmult_accel.cpp:119 in mmult_accel            |
+| interface       | s_axilite port = K bundle = control                            | ../mmult_accel.cpp:120 in mmult_accel            |
+| interface       | s_axilite port = M bundle = control                            | ../mmult_accel.cpp:121 in mmult_accel            |
+| interface       | s_axilite port = return bundle = control                       | ../mmult_accel.cpp:122 in mmult_accel            |
+| bind_storage    | variable=A_bram type=ram_2p impl=bram                          | ../mmult_accel.cpp:128 in mmult_accel, A_bram    |
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:133 in mmult_accel            |
+| bind_storage    | variable=B_local type=ram_2p impl=bram                         | ../mmult_accel.cpp:149 in mmult_accel, B_local   |
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:154 in mmult_accel            |
+| array_partition | variable=localC dim=0 complete                                 | ../mmult_accel.cpp:169 in mmult_accel, localC    |
+| unroll          |                                                                | ../mmult_accel.cpp:173 in mmult_accel            |
+| unroll          |                                                                | ../mmult_accel.cpp:175 in mmult_accel            |
+| pipeline        | II=1                                                           | ../mmult_accel.cpp:190 in mmult_accel            |
++-----------------+----------------------------------------------------------------+--------------------------------------------------+
 
 
