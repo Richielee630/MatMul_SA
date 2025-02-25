@@ -12,7 +12,7 @@
 #include <stdint.h>
 
 // Define the systolic array tile size (16x16)
-static const int TILE_SIZE = 16;
+// static const int TILE_SIZE = 16;
 
 // Top-level function prototype for matrix multiplication accelerator.
 // This matches the function we defined in mmult_accel.cpp
@@ -24,7 +24,8 @@ extern "C"
         int32_t *C,      // pointer to output matrix C in DDR
         int N,           // rows of A, rows of C
         int K,           // cols of A, rows of B
-        int M            // cols of B, cols of C
+        int M,            // cols of B, cols of C
+        int update_A   // flag to update matrix A from DDR
     );
 }
 
