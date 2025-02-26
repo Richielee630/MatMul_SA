@@ -71,16 +71,16 @@ extern "C"
             int current_block_M = ((j_block + BLOCK_M) <= M) ? BLOCK_M : (M - j_block);
 
             // Local buffer for a block of matrix B (dimensions: [K][BLOCK_M])
-            // Bind B_local to dual-port BRAM for fast on-chip access.
-            int8_t B_local[MAX_K][BLOCK_M];
-            #pragma HLS BIND_STORAGE variable=B_local type=ram_2p impl=bram
+            // Bind B_bram to dual-port BRAM for fast on-chip access.
+            int8_t B_bram[MAX_K][BLOCK_M];
+            #pragma HLS BIND_STORAGE variable=B_bram type=ram_2p impl=bram
 
             copy_B_block:
             for (int k = 0; k < K; k++) {
                 for (int j = 0; j < current_block_M; j++) {
                     // Pipeline this loop to maintain high throughput.
                     #pragma HLS PIPELINE II=1
-                    B_local[k][j] = B[k * M + (j_block + j)];
+                    B_bram[k][j] = B[k * M + (j_block + j)];
                 }
             }
 
@@ -99,6 +99,8 @@ extern "C"
                     #pragma HLS ARRAY_PARTITION variable=localC dim=0 complete
 
                     // Initialize the local C tile to 0.
+                    // Fully unroll the initialization loops because localC is fully partitioned (residing in registers),
+                    // which enables all 256 elements to be set to zero in parallel with minimal resource overhead.
                     init_c:
                     for (int ii = 0; ii < TILE_SIZE; ii++) {
                         #pragma HLS UNROLL
@@ -111,19 +113,25 @@ extern "C"
                     // Local buffers for tiles from matrix A and B.
                     int8_t localA[TILE_SIZE][TILE_SIZE];
                     int8_t localB[TILE_SIZE][TILE_SIZE];
-                    // Fully partition localA along its columns and localB along its rows 
-                    // to allow parallel accesses during multiplication.
+                    // Fully partition localA along its first dimension (rows) to enable 
+                    // parallel access across different rows during multiplication,
                     #pragma HLS ARRAY_PARTITION variable=localA dim=1 complete
+
+                    // Fully partition localB along its second dimension (columns) to allow 
+                    // parallel access across different columns.
                     #pragma HLS ARRAY_PARTITION variable=localB dim=2 complete
 
                     //****************************************************************
                     // Traverse the K dimension in chunks of TILE_SIZE.
-                    // For each tile, load data from A_bram and B_local to local buffers,
+                    // For each tile, load data from A_bram and B_bram to local buffers,
                     // then compute the multiplication.
                     //****************************************************************
                     k_loop:
                     for (int k0 = 0; k0 < K; k0 += TILE_SIZE) {
                         // Load a tile from A_bram into localA.
+                        // Pipeline this loop with an initiation interval (II) of 1 to ensure high throughput.
+                        // Pipelining here minimizes resource usage compared to unrolling, 
+                        // which is important for handling external memory accesses.
                         loadA:
                         for (int ii = 0; ii < TILE_SIZE; ii++) {
                             for (int kk = 0; kk < TILE_SIZE; kk++) {
@@ -138,7 +146,10 @@ extern "C"
                             }
                         }
 
-                        // Load a tile from B_local into localB.
+                        // Load a tile from B_bram into localB.
+                        // Similarly, pipeline this loop with II=1 to balance high throughput with resource usage,
+                        // avoiding the resource-intensive replication that full unrolling 
+                        // would require for external memory accesses.
                         loadB:
                         for (int kk = 0; kk < TILE_SIZE; kk++) {
                             for (int jj = 0; jj < TILE_SIZE; jj++) {
@@ -146,7 +157,7 @@ extern "C"
                                 int global_k = k0 + kk;
                                 int global_j = j0 + jj;
                                 if (global_k < K && global_j < current_block_M)
-                                    localB[kk][jj] = B_local[global_k][global_j];
+                                    localB[kk][jj] = B_bram[global_k][global_j];
                                 else
                                     localB[kk][jj] = 0;
                             }
