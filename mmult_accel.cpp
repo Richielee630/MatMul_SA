@@ -129,13 +129,11 @@ extern "C"
                     k_loop:
                     for (int k0 = 0; k0 < K; k0 += TILE_SIZE) {
                         // Load a tile from A_bram into localA.
-                        // Pipeline this loop with an initiation interval (II) of 1 to ensure high throughput.
-                        // Pipelining here minimizes resource usage compared to unrolling, 
-                        // which is important for handling external memory accesses.
+                        // Here, we partially unroll the outer loop (row index 'ii') because localA is partitioned along its first dimension.
                         loadA:
                         for (int ii = 0; ii < TILE_SIZE; ii++) {
+                            #pragma HLS UNROLL factor=4  // Example factor; adjust based on resource constraints.
                             for (int kk = 0; kk < TILE_SIZE; kk++) {
-                                // Pipeline this loop for high throughput.
                                 #pragma HLS PIPELINE II=1
                                 int global_i = i0 + ii;
                                 int global_k = k0 + kk;
@@ -146,18 +144,17 @@ extern "C"
                             }
                         }
 
-                        // Load a tile from B_bram into localB.
-                        // Similarly, pipeline this loop with II=1 to balance high throughput with resource usage,
-                        // avoiding the resource-intensive replication that full unrolling 
-                        // would require for external memory accesses.
+                        // Load a tile from B_local into localB.
+                        // In this case, we partially unroll the inner loop (column index 'jj') since localB is partitioned along its second dimension.
                         loadB:
                         for (int kk = 0; kk < TILE_SIZE; kk++) {
                             for (int jj = 0; jj < TILE_SIZE; jj++) {
+                                #pragma HLS UNROLL factor=4  // Example factor; adjust as needed.
                                 #pragma HLS PIPELINE II=1
                                 int global_k = k0 + kk;
                                 int global_j = j0 + jj;
                                 if (global_k < K && global_j < current_block_M)
-                                    localB[kk][jj] = B_bram[global_k][global_j];
+                                    localB[kk][jj] = B_local[global_k][global_j];
                                 else
                                     localB[kk][jj] = 0;
                             }
