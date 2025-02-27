@@ -11,7 +11,7 @@
 #define BLOCK_M 256
 
 // Matrix tile size fixed to 16
-const int TILE_SIZE = 16;
+const int TILE_SIZE = 32;
 
 extern "C"
 {
@@ -113,13 +113,10 @@ extern "C"
                     // Local buffers for tiles from matrix A and B.
                     int8_t localA[TILE_SIZE][TILE_SIZE];
                     int8_t localB[TILE_SIZE][TILE_SIZE];
-                    // Fully partition localA along its first dimension (rows) to enable 
-                    // parallel access across different rows during multiplication,
-                    #pragma HLS ARRAY_PARTITION variable=localA dim=1 complete
-
-                    // Fully partition localB along its second dimension (columns) to allow 
-                    // parallel access across different columns.
-                    #pragma HLS ARRAY_PARTITION variable=localB dim=2 complete
+                    // Fully partition localA and LocalB
+                    // To enable full paralle access in later compute loop
+                    #pragma HLS ARRAY_PARTITION variable=localA dim=0 complete
+                    #pragma HLS ARRAY_PARTITION variable=localB dim=0 complete
 
                     //****************************************************************
                     // Traverse the K dimension in chunks of TILE_SIZE.
