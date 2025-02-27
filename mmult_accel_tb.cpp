@@ -43,11 +43,18 @@ int main()
     // 1. Standard small size (all dimensions are multiples of TILE_SIZE)
     // 2. M greater than BLOCK_M, triggering B block logic
     // 3. Non-multiple sizes, testing boundary conditions
+#ifdef FAST_COSIM
+    #pragma message("FAST_COSIM mode: running minimal test case for quick cosim")
+    TestCase test_cases[] = {
+        {8, 64, 64}
+    };
+#else
     TestCase test_cases[] = {
         {16, 768, 768},
         {32, 768, 768},
         {64, 768, 768},
     };
+#endif
     const int num_tests = sizeof(test_cases) / sizeof(TestCase);
     bool overall_pass = true;
 
