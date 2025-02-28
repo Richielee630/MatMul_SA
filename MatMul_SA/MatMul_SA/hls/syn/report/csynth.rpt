@@ -4,7 +4,7 @@
 == Synthesis Summary Report of 'mmult_accel'
 ================================================================
 + General Information: 
-    * Date:           Thu Feb 27 19:31:12 2025
+    * Date:           Fri Feb 28 13:48:16 2025
     * Version:        2024.2 (Build 5238294 on Nov  8 2024)
     * Project:        MatMul_SA
     * Solution:       hls (Vivado IP Flow Target)
