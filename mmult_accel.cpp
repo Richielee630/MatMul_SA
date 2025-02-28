@@ -2,36 +2,74 @@
 #include <hls_stream.h>
 #include <stdint.h>
 
-// Define maximum matrix dimensions (consider BRAM resource limitations)
-#define MAX_N 64
-#define MAX_K 768
-#define MAX_M 768
+/**
+ * @brief Matrix multiplication accelerator parameters
+ * 
+ * These parameters define the maximum dimensions supported by the accelerator
+ * and are constrained by available FPGA resources (particularly BRAM).
+ */
+#define MAX_N 64    // Maximum number of rows in matrix A and output C
+#define MAX_K 768   // Maximum shared dimension between matrices A and B
+#define MAX_M 768   // Maximum number of columns in matrix B and output C
 
-// Define the width of B blocks
+/** 
+ * @brief Memory blocking parameter for column-wise processing
+ * 
+ * For efficient memory usage, matrix B is processed in blocks of BLOCK_M columns.
+ * This reduces on-chip memory requirements while maintaining high throughput.
+ */
 #define BLOCK_M 256
 
-// Matrix tile size fixed to 16
+/**
+ * @brief Computation tile size for enhanced parallelism
+ * 
+ * The tile size determines the dimensions of local buffers used during computation.
+ * Larger values increase parallelism but require more FPGA resources.
+ */
 const int TILE_SIZE = 32;
+
+/**
+ * @brief Data type definitions for input and output matrices
+ * 
+ * Using int8_t for inputs enables efficient storage and computation.
+ * int32_t for outputs provides sufficient dynamic range for accumulated results.
+ */
+#define DTYPE_IN int8_t
+#define DTYPE_OUT int32_t
 
 extern "C"
 {
-    // The 'update_A' flag indicates when to reload matrix A from DDR.
-    void mmult_accel(const int8_t *A, const int8_t *B, int32_t *C,
+    /**
+     * @brief Matrix multiplication accelerator with persistent on-chip storage
+     * 
+     * This function implements an optimized matrix multiplication (C = A×B) where:
+     * - Matrix A can be persistent in on-chip memory between calls
+     * - Processing is tiled and blocked for optimal FPGA resource utilization
+     * - Computation is highly parallelized within each tile
+     * 
+     * @param A Input matrix A [N×K] (row-major)
+     * @param B Input matrix B [K×M] (row-major)
+     * @param C Output matrix C [N×M] (row-major)
+     * @param N Number of rows in matrix A and output C
+     * @param K Shared dimension between matrices A and B
+     * @param M Number of columns in matrix B and output C
+     * @param update_A Flag to control reloading of matrix A (1=reload, 0=reuse)
+     */
+    void mmult_accel(const DTYPE_IN *A, const DTYPE_IN *B, DTYPE_OUT *C,
                      int N, int K, int M, int update_A)
     {
         //********************************************************************
-        // AXI Memory Interface Pragma Declarations:
-        // - m_axi interfaces: Connects arrays A, B, and C to external DDR memory.
-        // - 'depth' specifies the maximum number of elements to be transferred.
+        // AXI Memory Interface Configuration:
+        // Connects matrices A, B, C to external memory through separate channels
+        // with specified depth limits for memory transfers
         //********************************************************************
         #pragma HLS INTERFACE m_axi port = A offset = slave bundle = gmemA depth = MAX_N * MAX_K
         #pragma HLS INTERFACE m_axi port = B offset = slave bundle = gmemB depth = MAX_K * MAX_M
         #pragma HLS INTERFACE m_axi port = C offset = slave bundle = gmemC depth = MAX_N * MAX_M
 
         //********************************************************************
-        // AXI-Lite Interface Pragma Declarations:
-        // - s_axilite interfaces: For passing control arguments (A, B, C, N, K, M, update_A)
-        // - 'return' port: Allows the host to know when the accelerator function has completed.
+        // AXI-Lite Control Interface Configuration:
+        // Provides host control over function parameters and execution state
         //********************************************************************
         #pragma HLS INTERFACE s_axilite port = A bundle = control
         #pragma HLS INTERFACE s_axilite port = B bundle = control
@@ -44,19 +82,19 @@ extern "C"
 
         //********************************************************************
         // Persistent On-Chip Storage for Matrix A:
-        // - 'static' ensures that A_bram retains its content across function calls.
-        // - BIND_STORAGE binds A_bram to dual-port BRAM for efficient on-chip storage.
+        // Static allocation ensures data persistence across function calls
+        // Dual-port BRAM implementation enables parallel access
         //********************************************************************
-        static int8_t A_bram[MAX_N][MAX_K];
+        static DTYPE_IN A_bram[MAX_N][MAX_K];
         #pragma HLS BIND_STORAGE variable=A_bram type=ram_2p impl=bram
 
-        // Reload matrix A from DDR only if update_A flag is set
+        // Conditionally reload matrix A from external memory to on-chip BRAM
+        // This optimization allows reusing A across multiple calculations
         if(update_A)
         {
             copy_A:
             for (int i = 0; i < N; i++) {
                 for (int k = 0; k < K; k++) {
-                    // Pipeline this loop to achieve an initiation interval (II) of 1.
                     #pragma HLS PIPELINE II=1
                     A_bram[i][k] = A[i * K + k];
                 }
@@ -64,43 +102,45 @@ extern "C"
         }
 
         //********************************************************************
-        // Process Matrix B (weights) and Matrix C (output) in column blocks:
+        // Block-based Processing of Matrix B:
+        // Process matrix B in column blocks to optimize memory usage
+        // Each block is loaded into on-chip BRAM for efficient access
         //********************************************************************
         outer_j_block:
         for (int j_block = 0; j_block < M; j_block += BLOCK_M) {
             int current_block_M = ((j_block + BLOCK_M) <= M) ? BLOCK_M : (M - j_block);
 
-            // Local buffer for a block of matrix B (dimensions: [K][BLOCK_M])
-            // Bind B_bram to dual-port BRAM for fast on-chip access.
-            int8_t B_bram[MAX_K][BLOCK_M];
+            // Allocate on-chip storage for current block of matrix B
+            DTYPE_IN B_bram[MAX_K][BLOCK_M];
             #pragma HLS BIND_STORAGE variable=B_bram type=ram_2p impl=bram
 
+            // Load current block of matrix B into on-chip BRAM
             copy_B_block:
             for (int k = 0; k < K; k++) {
                 for (int j = 0; j < current_block_M; j++) {
-                    // Pipeline this loop to maintain high throughput.
                     #pragma HLS PIPELINE II=1
                     B_bram[k][j] = B[k * M + (j_block + j)];
                 }
             }
 
             //****************************************************************
-            // Compute the corresponding part of C for the current B block.
-            // This computation is tiled by both rows (i0) and columns (j0).
+            // Tiled Matrix Multiplication:
+            // Divide computation into tiles for both row and column dimensions
+            // This approach optimizes data reuse and computation parallelism
             //****************************************************************
             tile_i:
             for (int i0 = 0; i0 < N; i0 += TILE_SIZE) {
                 tile_j:
                 for (int j0 = 0; j0 < current_block_M; j0 += TILE_SIZE) {
 
-                    // Local buffer for a tile of output matrix C.
-                    // Fully partition localC for maximum parallelism.
-                    int32_t localC[TILE_SIZE][TILE_SIZE];
+                    // Allocate and partition register array for output tile
+                    // Complete partitioning transforms the array into individual registers
+                    // for maximum parallel access
+                    DTYPE_OUT localC[TILE_SIZE][TILE_SIZE];
                     #pragma HLS ARRAY_PARTITION variable=localC dim=0 complete
 
-                    // Initialize the local C tile to 0.
-                    // Fully unroll the initialization loops because localC is fully partitioned (residing in registers),
-                    // which enables all 256 elements to be set to zero in parallel with minimal resource overhead.
+                    // Initialize output tile to zero
+                    // Full unrolling enables parallel initialization of all elements
                     init_c:
                     for (int ii = 0; ii < TILE_SIZE; ii++) {
                         #pragma HLS UNROLL
@@ -110,29 +150,25 @@ extern "C"
                         }
                     }
 
-                    // Local buffers for tiles from matrix A and B.
-                    int8_t localA[TILE_SIZE][TILE_SIZE];
-                    int8_t localB[TILE_SIZE][TILE_SIZE];
-                    // Fully partition localA and LocalB
-                    // To enable full paralle access in later compute loop
+                    // Allocate and partition register arrays for input tiles
+                    // Complete partitioning enables parallel access to all elements
+                    DTYPE_IN localA[TILE_SIZE][TILE_SIZE];
+                    DTYPE_IN localB[TILE_SIZE][TILE_SIZE];
                     #pragma HLS ARRAY_PARTITION variable=localA dim=0 complete
                     #pragma HLS ARRAY_PARTITION variable=localB dim=0 complete
 
                     //****************************************************************
-                    // Traverse the K dimension in chunks of TILE_SIZE.
-                    // For each tile, load data from A_bram and B_bram to local buffers,
-                    // then compute the multiplication.
+                    // K-dimension Tiling:
+                    // Process shared dimension K in tiles to maximize data reuse
+                    // For each K-tile, load data into local buffers then compute
                     //****************************************************************
                     k_loop:
                     for (int k0 = 0; k0 < K; k0 += TILE_SIZE) {
-                        // Load a tile from A_bram into localA.
-                        // Pipeline this loop with an initiation interval (II) of 1 to ensure high throughput.
-                        // Pipelining here minimizes resource usage compared to unrolling, 
-                        // which is important for handling external memory accesses.
+                        // Load tile from matrix A into local buffer
+                        // Pipelined implementation balances throughput and resource usage
                         loadA:
                         for (int ii = 0; ii < TILE_SIZE; ii++) {
                             for (int kk = 0; kk < TILE_SIZE; kk++) {
-                                // Pipeline this loop for high throughput.
                                 #pragma HLS PIPELINE II=1
                                 int global_i = i0 + ii;
                                 int global_k = k0 + kk;
@@ -143,10 +179,8 @@ extern "C"
                             }
                         }
 
-                        // Load a tile from B_bram into localB.
-                        // Similarly, pipeline this loop with II=1 to balance high throughput with resource usage,
-                        // avoiding the resource-intensive replication that full unrolling 
-                        // would require for external memory accesses.
+                        // Load tile from matrix B into local buffer
+                        // Pipelined for efficient memory access
                         loadB:
                         for (int kk = 0; kk < TILE_SIZE; kk++) {
                             for (int jj = 0; jj < TILE_SIZE; jj++) {
@@ -160,30 +194,27 @@ extern "C"
                             }
                         }
 
-                        // Compute the matrix multiplication for the current tile:
-                        // localC = localC + localA * localB.
+                        // Compute matrix multiplication for current tile
+                        // Highly optimized with pipelining and unrolling for maximum throughput
                         compute:
                         for (int kk = 0; kk < TILE_SIZE; kk++) {
                             #pragma HLS PIPELINE II=1
                             for (int ii = 0; ii < TILE_SIZE; ii++) {
                                 #pragma HLS UNROLL
-                                // Compute a_val once per (kk, ii) since localA[ii][kk] is invariant for the entire jj loop.
-                                // Declaring a_val here ensures that each unrolled iteration gets its own register,
-                                // which maximizes parallelism and avoids redundant computations.
-                                int32_t a_val = (int32_t)localA[ii][kk];
+                                // Pre-load and cast A value to output type once per iteration
+                                DTYPE_OUT a_val = (DTYPE_OUT)localA[ii][kk];
                                 for (int jj = 0; jj < TILE_SIZE; jj++) {
                                     #pragma HLS UNROLL 
-                                    // Compute b_val within the jj loop because localB[kk][jj] changes with jj.
-                                    // Declaring b_val here also guarantees that each iteration of the unrolled loop 
-                                    // has its own independent value, enabling the HLS tool to optimize the pipeline effectively.
-                                    int32_t b_val = (int32_t)localB[kk][jj];
+                                    // Cast B value to output type and accumulate product
+                                    DTYPE_OUT b_val = (DTYPE_OUT)localB[kk][jj];
                                     localC[ii][jj] += a_val * b_val;
                                 }
                             }
                         }
                     } // End of k_loop
 
-                    // Write the computed tile of matrix C back to DDR.
+                    // Write computed tile back to external memory
+                    // Boundary checking ensures valid data only is written
                     writeC:
                     for (int ii = 0; ii < TILE_SIZE; ii++) {
                         for (int jj = 0; jj < TILE_SIZE; jj++) {
